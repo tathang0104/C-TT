@@ -1,31 +1,31 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
+require("dotenv").config({ path: "./config.env" });
+const express = require("express");
 const app = express();
+const connectDB = require("./config/db");
+const errorHandler = require("./middleware/error");
+
+connectDB();
 
 app.use(express.json());
 
-const userRouter = require('./routes/auth')
+app.get("/", (req, res, next) => {
+  res.send("Api running");
+});
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect('mongodb://localhost:27017/ChuyenDeThucTap', { 
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        })
-        console.log("Mongodb: connected")
-    }
-    catch (e) { 
-        console.log(e);
-        process.exit(1);
-    }
-}
+// Connecting Routes
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/private", require("./routes/private"));
 
-connectDB()
+// Error Handler Middleware
+app.use(errorHandler);
 
+const PORT = process.env.PORT || 5000;
 
-app.use('/users', userRouter);
+const server = app.listen(PORT, () =>
+  console.log(`Sever running on port ${PORT}`)
+);
 
-const PORT =  5000;
-
-app.listen(PORT, () => {console.log(`Server is listening on port ${PORT}`);});
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Logged Error: ${err.message}`);
+  server.close(() => process.exit(1));
+});
