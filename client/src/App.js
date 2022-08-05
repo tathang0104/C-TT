@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import PrivateRoute from "./components/routing/PrivateRoute";
+
+import Home from "./components/pages/Home";
+import Login from "./components/pages/Login";
+import Register from "./components/pages/Register";
+import ForgotPassword from "./components/pages/ForgotPassword";
+import ResetPassword from "./components/pages/ResetPassword";
+import Dashboard from "./components/pages/Dashboard";
+
+import './index.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Fragment>
+        <div className="app">
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+
+            {/* authorization */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route
+              path="/passwordreset/:resetToken"
+              element={<ResetPassword />}
+            />
+          </Routes>
+        </div>
+      </Fragment>
+    </Router>
   );
 }
 
