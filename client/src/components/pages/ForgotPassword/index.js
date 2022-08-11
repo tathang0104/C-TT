@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import "./style.css"
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState("");

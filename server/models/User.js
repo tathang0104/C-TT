@@ -22,7 +22,36 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please add a password"],
     minlength: 6,
     select: false,
+  }, 
+  avatarUrl: {
+    type: String,
+    default: ''
   },
+  avatarPath: {
+    type: String,
+    default: ''
+  },
+  gender: {
+    type: String,
+    enum: ['male', 'female'],
+    default: ''
+  },
+  dob: {
+    type: Date,
+    default: ''
+  },
+  address: {
+    type: String,
+    default: ''
+  },
+  createdAt: {
+		type: Date,
+		default: Date.now
+	},
+  updatedAt: {
+		type: Date,
+		default: Date.now
+	}, 
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });

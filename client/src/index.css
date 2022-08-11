@@ -1,10 +1,9 @@
-* {
+
+/*
+body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.7;
     background: #eee;
@@ -72,7 +71,7 @@ body {
     margin: 0.5rem 0;
 }
 
-/* login */
+
 .login-screen {
     width: 100%;
     height: 100vh;
@@ -103,7 +102,7 @@ body {
     margin: 0.5rem 0;
 }
 
-/* register */
+
 
 .register-screen {
     width: 100%;
@@ -131,7 +130,7 @@ body {
     margin: 0.5rem 0;
 }
 
-/* resetPassword */
+
 
 .resetpassword-screen {
     width: 100%;
@@ -153,7 +152,7 @@ body {
     margin-bottom: 1rem;
 }
 
-/* forgotPassword */
+
 
 .forgotpassword-screen {
     width: 100%;
@@ -180,3 +179,4 @@ body {
     display: block;
     margin: 0.5rem 0;
 }
+*/

@@ -50,6 +50,39 @@ exports.register = async (req, res, next) => {
   }
 };
 
+// @desc    Updated profile user
+exports.updateUser = async (req, res, next) => {
+  const { _id } = req.params._id;
+  
+  try {
+    const user = await User.findOne({ _id });
+
+    if (!user) {
+      return next(new ErrorResponse("You have no permissions to update", 401));
+    }
+
+    user.avatarUrl = req.body.avatarUrl;
+    user.avatarPath = req.body.avatarPath;
+    user.gender = req.body.gender;
+    user.dob = req.body.dob;
+    user.address = req.body.address;
+    user.updatedAt = new Date();
+
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      data: "Profile Updated Success",
+      // token: token,
+    });
+
+    // sendToken(user, 200, res);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc    Forgot Password Initialization
 exports.forgotPassword = async (req, res, next) => {
   // Send Email to email provided but first check if user exists
