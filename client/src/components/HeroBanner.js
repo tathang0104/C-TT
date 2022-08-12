@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 
 export default function HeroBanner(prop) {
+
   return (
     <div className="container my-5 py-5">
       <div className="row align-items-center g-5">

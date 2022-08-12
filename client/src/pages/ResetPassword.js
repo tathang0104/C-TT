@@ -2,7 +2,7 @@ import { useState} from "react";
 import { Link, useParams, useNavigate  } from "react-router-dom";
 import axios from "axios";
 
-const ResetPasswordScreen = () => {
+const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -96,4 +96,4 @@ const ResetPasswordScreen = () => {
   );
 };
 
-export default ResetPasswordScreen;
+export default ResetPassword;

@@ -12,7 +12,7 @@ function Login() {
     if (localStorage.getItem("authToken")) {
      navigate("/dashboard")
     }
-  }, []);
+  }, [navigate]);
 
   const loginHandler = async (e) => {
     e.preventDefault();

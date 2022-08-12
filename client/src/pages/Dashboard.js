@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const PrivateScreen = () => {
+const Dasboard = () => {
   const [error, setError] = useState("");
   const [privateData, setPrivateData] = useState("");
 
@@ -32,4 +32,4 @@ const PrivateScreen = () => {
   );
 };
 
-export default PrivateScreen;
+export default Dasboard;
