@@ -1,14 +1,17 @@
 import React from 'react'
+import useInView from '../hooks/useInView'
+import clsx from "clsx"
 
 export default function Menu() {
+    const title = useInView()
   return (
     <div className="container-xxl py-5">
     <div className="container">
-        <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+        <div ref={title.ref} className={clsx("text-center", {"animate__animated animate__fadeInUp": title.isInView})}>
             <h5 className="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
             <h1 className="mb-5">Most Popular Items</h1>
         </div>
-        <div className="tab-class text-center wow fadeInUp" data-wow-delay="0.1s">
+        <div ref={title.ref} className={clsx("text-center tab-class", {"animate__animated animate__fadeInUp animate__delay-1s": title.isInView})}>
             <ul className="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
                 <li className="nav-item">
                     <a className="d-flex align-items-center text-start mx-3 ms-0 pb-3 active" data-bs-toggle="pill" href="#tab-1">

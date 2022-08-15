@@ -9,7 +9,7 @@ export default function Banner(prop) {
             <ol className="breadcrumb justify-content-center text-uppercase">
                 <li className="breadcrumb-item"><Link to={"/"}>Home</Link></li>
                 <li className="breadcrumb-item text-white">Pages</li>
-                <li className="breadcrumb-item text-white"><Link to={`/${prop.name}`}>{prop.name}</Link></li>
+                <li className="breadcrumb-item "><Link to={`/${prop.name}`}>{prop.name}</Link></li>
             </ol>
         </nav>
     </div>

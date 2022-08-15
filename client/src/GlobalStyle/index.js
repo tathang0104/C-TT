@@ -1,7 +1,6 @@
-// eslint-disable-next-line
-import "./bootstrap.min.css"
 
-// require('bootstrap')
+import "./bootstrap.min.css"
+import 'animate.css';
 
 import "./styles.css";
 

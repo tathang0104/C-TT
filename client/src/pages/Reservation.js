@@ -1,10 +1,13 @@
 import React from 'react'
+import useInView from '../hooks/useInView'
+import clsx from "clsx"
 
 export default function Reservation() {
+    const title = useInView()
 
     return (
     <>
-        <div className="container-xxl py-5 px-0 wow fadeInUp" data-wow-delay="0.1s">
+        <div ref={title.ref} className={clsx("container-xxl py-5 px-0", {"animate__animated animate__fadeInUp": title.isInView})}>
             <div className="row g-0">
                 <div className="col-md-6">
                     <div className="video">
@@ -14,7 +17,7 @@ export default function Reservation() {
                     </div>
                 </div>
                 <div className="col-md-6 bg-dark d-flex align-items-center">
-                    <div className="p-5 wow fadeInUp" data-wow-delay="0.2s">
+                    <div ref={title.ref} className={clsx("p-5 wow fadeInUp", {"animate__animated animate__fadeInUp animate__delay-1s": title.isInView})}>
                         <h5 className="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
                         <h1 className="text-white mb-4">Book A Table Online</h1>
                         <form>
