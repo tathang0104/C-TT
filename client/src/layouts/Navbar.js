@@ -33,11 +33,10 @@ export default function Navbar() {
     }
     
     useEffect(()=> {
-        let lastIndex = 0;
-        window.addEventListener("scroll", ()=> {
+        const handleScroll =() => {
             const navbar = document.getElementById("navbar");
          
-            if(lastIndex < document.documentElement.scrollTop) {
+            if(document.documentElement.scrollTop > 150) {
                 if(!navbar?.classList.contains("sticky-top")) {
                     navbar?.classList.add("sticky-top", "shadow-sm")
                 }
@@ -47,23 +46,20 @@ export default function Navbar() {
                     navbar?.classList.remove("sticky-top", "shadow-sm")
                 }
             }
-            lastIndex = document.documentElement.scrollTop;
-        })
+        }
+        window.addEventListener("scroll", handleScroll)
 
         return ()=> {
-            window.removeEventListener("scroll", ()=> {
-                lastIndex = document.documentElement.scrollTop;
-            })
+            window.removeEventListener("scroll", handleScroll)
         }
     }, [])
 
     const show = isDropDown ? "show" : ""
-    console.log(show)
     return (
 
 
     <div className="container-xxl position-relative p-0">
-            <nav id="navbar" className="navbar navbar-expand-lg navbar-dark bg-dark px-3 px-lg-4 py-3 py-lg-0">
+            <nav id="navbar" className="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
                 <Link to={"/"} className="navbar-brand p-0">
                     <h1 className="text-primary m-0"><i className="fa fa-utensils me-3"></i>Restoran</h1>
                 </Link>

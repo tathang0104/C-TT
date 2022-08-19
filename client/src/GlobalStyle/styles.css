@@ -1,13 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css");
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
-/* @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.css"); */
 
 :root {
     --primary: #FEA116;
     --light: #F1F8FF;
     --dark: #0F172B;
-    --animate-delay: 0.3s;
+    --animate-delay: 0.2s;
 }
 
 .ff-secondary {
@@ -215,6 +214,31 @@
     display: none;
 }
 
+.menu-search i {
+    display: inline-block;
+    padding: 7px;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    border: 1px solid #FEA116;
+    border-right: 0;
+}
+
+.menu-search input {
+    display: inline-block;
+    border: 1px solid #FEA116;
+    padding: 3px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-left: none;
+}
+
+.menu-search input:focus {
+    outline: none;
+    border: 1px solid #FEA116;
+    border-left: none;
+    min-width: 120%;
+    /* background-color: #000000; */
+}
 
 /*** Service ***/
 .service-item {
@@ -358,6 +382,14 @@
     opacity: 1;
 }
 
+.hide {
+    display: none;
+    opacity: 0;
+}
+
+.modal iframe {
+    width: 100%;
+}
 
 /*** Team ***/
 .team-item {

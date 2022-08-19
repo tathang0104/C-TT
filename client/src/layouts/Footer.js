@@ -1,10 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import clsx from 'clsx'
+import useInView from '../hooks/useInView'
 
 export default function Footer() {
+    const footer = useInView()
+
   return (
     <>
-        <div className="container-fluid bg-dark text-light footer pt-5 mt-5 animated fadeIn" data-wow-delay="0.1s">
+        <div ref={footer.ref} className={clsx("container-fluid bg-dark text-light footer pt-5", {"animate__animated animate__fadeIn": footer.isInView})}>
             <div className="container py-5">
                 <div className="row g-5">
                     <div className="col-lg-3 col-md-6">

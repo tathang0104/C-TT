@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useInView from '../hooks/useInView'
 import clsx from "clsx"
+import YouTube from 'react-youtube'
+import Modal from '../components/Modal'
 
 export default function Reservation() {
     const title = useInView()
+    const [showModal, setShowModal] = useState(false);
+    const handerShow = () => {
+        setShowModal(prev => !prev)
+    }
+      
 
     return (
     <>
@@ -11,13 +18,13 @@ export default function Reservation() {
             <div className="row g-0">
                 <div className="col-md-6">
                     <div className="video">
-                        <button type="button" className="btn-play" data-bs-toggle="modal" data-src="https://www.youtube.com/embed/DWRcNpR6Kdc" data-bs-target="#videoModal">
+                        <button type="button" className="btn-play" onClick={handerShow} >
                             <span></span>
                         </button>
                     </div>
                 </div>
                 <div className="col-md-6 bg-dark d-flex align-items-center">
-                    <div ref={title.ref} className={clsx("p-5 wow fadeInUp", {"animate__animated animate__fadeInUp animate__delay-1s": title.isInView})}>
+                    <div ref={title.ref} className={clsx("p-5", {"animate__animated animate__fadeInUp animate__delay-1s": title.isInView})}>
                         <h5 className="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
                         <h1 className="text-white mb-4">Book A Table Online</h1>
                         <form>
@@ -65,22 +72,13 @@ export default function Reservation() {
                 </div>
             </div>
         </div>
+        {
+            showModal &&
+            <Modal isShow={showModal} title="Youtube Video" handlerShow={handerShow} >
+                <YouTube videoId="lOLHRvsqaMU"/>
+            </Modal>
+        }
 
-        <div className="modal fade" id="videoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content rounded-0">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">Youtube Video</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div className="modal-body">
-                        <div className="ratio ratio-16x9">
-                        <iframe className="embed-responsive-item" title='video' src="" id="video" allowFullScreen allowscriptaccess="always" allow="autoplay"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </>
   )
 }

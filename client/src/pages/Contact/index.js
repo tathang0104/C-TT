@@ -1,10 +1,14 @@
 import React from "react";
+import clsx from "clsx"
+import useInView from "../../hooks/useInView";
 
 export default function Contact() {
+  const contact = useInView()
+
   return (
-    <div className="container-xxl py-5">
+    <div ref={contact.ref} className="container-xxl py-5">
       <div className="container">
-        <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+        <div className={clsx("text-center", {"animate__animated animate__fadeInUp" : contact.isInView})}>
           <h5 className="section-title ff-secondary text-center text-primary fw-normal">
             Contact Us
           </h5>
@@ -42,7 +46,7 @@ export default function Contact() {
               </div>
             </div>
           </div>
-          <div className="col-md-6 wow fadeIn" data-wow-delay="0.1s">
+          <div className={clsx("col-md-6", {"animate__animated animate__fadeIn animate__delay-3s" : contact.isInView})}>
             <iframe
               title="map"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1862.4099688329347!2d105.83418895807448!3d20.999853796503523!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135add060df17f3%3A0xa487860b389b610!2sHH2%20MecoComplex!5e0!3m2!1svi!2s!4v1660294153413!5m2!1svi!2s"
@@ -53,7 +57,7 @@ export default function Contact() {
             ></iframe>
           </div>
           <div className="col-md-6">
-            <div className="wow fadeInUp" data-wow-delay="0.2s">
+            <div className={clsx("", {"animate__animated animate__fadeInUp animate__delay-3s" : contact.isInView})}>
               <form>
                 <div className="row g-3">
                   <div className="col-md-6">
