@@ -1,10 +1,17 @@
-import React from "react";
+import { useContext} from "react";
+import CartContext from "../../../CartContext";
 
 export const MenuDetail = (props) => {
+
+  const { addToCard } = useContext(CartContext)
+
   return (
     <>
-      <div className="col-lg-6" id={`detail-menu-${props.id}`} onClick={props.addToCard}>
-        <div className="d-flex align-items-center">
+      <div className="col-lg-6" onClick={()=> addToCard(props.id)} >
+        <div className="d-flex align-items-center detail-menu position-relative" id={`detail-menu-${props.id}`}>
+          <div className="d-flex align-items-center justify-content-center position-absolute">
+            <i className="fa fa-plus-circle fa-2x"></i>
+          </div>
           <img
             className="flex-shrink-0 img-fluid rounded"
             src={`/img/${props.photo}`}

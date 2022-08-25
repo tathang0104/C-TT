@@ -237,7 +237,38 @@
     border: 1px solid #FEA116;
     border-left: none;
     min-width: 120%;
-    /* background-color: #000000; */
+}
+
+.detail-menu div:first-child {
+    height: 100%;
+    width: 0px;  
+    transition: all 0.5s ease 0s; 
+    -webkit-transition: all 0.5s ease 0s; 
+    z-index: 1;
+    opacity: 0.8;
+    background-color: #efeeee;   
+}
+
+.detail-menu:hover div:first-child  {
+    width: 80px;
+
+}
+.detail-menu:hover i  {
+    display: block;
+}
+
+.detail-menu div i {
+    display: none;
+    color: #d26702;
+}
+.w-15 {
+    width: 15% !important;
+}
+.w-10 {
+    width: 10% !important;
+}
+.w-5 {
+    width: 5% !important;
 }
 
 /*** Service ***/

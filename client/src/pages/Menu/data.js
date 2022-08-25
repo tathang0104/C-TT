@@ -5,6 +5,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -13,6 +14,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 50,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -21,6 +23,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -29,6 +32,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -37,6 +41,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -45,6 +50,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -53,6 +59,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -61,6 +68,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -69,6 +77,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -77,6 +86,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -85,6 +95,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -93,6 +104,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -101,6 +113,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -109,6 +122,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -117,6 +131,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -125,6 +140,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -133,6 +149,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -141,6 +158,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -149,6 +167,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -157,6 +176,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -165,6 +185,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -173,6 +194,7 @@ const data = [
         "category": "Breakfast",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -181,6 +203,7 @@ const data = [
         "category": "Launch",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
     {
@@ -189,6 +212,7 @@ const data = [
         "category": "Diner",
         "name": "Chicken Burger",
         "price": 115,
+        "quantity" : 10,
         "description": "Ipsum ipsum clita erat amet dolor justo diam"
     },
 ]

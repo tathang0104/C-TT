@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Banner from '../components/Banner'
 import Button from '../components/Button'
 import HeroBanner from '../components/HeroBanner'
+import CartContext from '../CartContext'
 
 
 export default function Navbar() {
 
+    const { orders } = useContext(CartContext)
     const [isMenu, setIsMenu] = useState(false)
     const [isDropDown, setIsDropDown] = useState(false)
 
@@ -84,7 +86,10 @@ export default function Navbar() {
                     </div>
                     <div className="px-2 py-4">
                         <Link to={"/reservation"}>
-                            <Button name="Book A Table">Book A Table</Button>
+                            <Button name="Book A Table">
+                                Book A Table
+                                <span> ({orders.length})</span>
+                            </Button>
                         </Link>
                     </div>
                 </div>

@@ -8,14 +8,10 @@ const Modal = props => {
     const [show, setShow] = useState(props.isShow);
     const children = props.children;
     const title = props.title;
-    // const handlerShow = () => {
-    //     setShow(pre => !pre)
-    // }
-
 
     return (
     <>
-        <div style={!show ? {display: "none"} : {display: "block"}} className={clsx("modal")} role="dialog"  id="videoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-modal="true">
+        <div style={!show ? {display: "none"} : {display: "block"}} className={clsx("modal animate__animated animate__fadeIn")} role="dialog"  id="videoModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-modal="true">
         {/* <div className={clsx("modal")} > */}
             <div className="modal-dialog">
                 <div className="modal-content rounded-0">
@@ -34,7 +30,7 @@ const Modal = props => {
 }
 
 Modal.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.element,
     handlerShow: PropTypes.func,
     isShow: PropTypes.bool,
     title: PropTypes.string,
