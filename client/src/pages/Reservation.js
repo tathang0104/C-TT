@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from "axios";
 import useInView from '../hooks/useInView'
 import clsx from "clsx"
 import YouTube from 'react-youtube'
@@ -13,6 +14,12 @@ export default function Reservation() {
     const handerShow = () => {
         setShowModal(prev => !prev)
     }
+
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [dateTime, setDateTime] = useState("");
+    const [specialRequest, setSpecialRequest] = useState("");
+    const [peopleEat, setPeopleEat] = useState("People 1");
     const [orderSuccess, setOrderSuccess] = useState(false);
       
     const { orders } = useContext(CartContext);
@@ -41,14 +48,32 @@ export default function Reservation() {
     // console.log(sum)
     // const orderSuccessFul
 
-    const handerSubmitFormOrderd = (e, orders) => {
+    const handerSubmitFormOrderd = async (e, orders) => {
         e.preventDefault()
+        
         if (orders.length === 0) {
-            console.log(orders.length)
             document.getElementsByClassName('err')[0].innerHTML = 'Please select a new order in menu'
         } else {
             setOrderSuccess(true)
             console.log(orders)
+
+            const config = {
+                header: {
+                "Content-Type": "application/json",
+                },
+            };
+
+            try {
+                const { data } = await axios.post(
+                    "/api/client/bookingtable",
+                    { email, orders, name, dateTime, peopleEat, specialRequest },
+                    config
+                );
+                
+                console.log(data)
+            } catch (error) {
+                console.log(error.response.data.error);
+            }
         }
     }
 
@@ -68,40 +93,59 @@ export default function Reservation() {
                         <h5 className="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
                         <h1 className="text-white mb-4">Book A Table Online</h1>
                         {menuOrdered}
-                        <h5 className="text-end text-primary">Total price: {sum} $</h5>
+                        {
+                            sum !== 0 &&
+                            <h5 className="text-end text-primary">Total price: {sum} $</h5>
+                        }
                         <form className='mt-3' onSubmit={(e)=>handerSubmitFormOrderd(e, orders)}>
                             <div className="row g-3">
                                 <div className="col-md-6">
                                     <div className="form-floating">
-                                        <input type="text" className="form-control" required id="name" placeholder="Your Name" />
+                                        <input type="text" className="form-control" required id="name" placeholder="Your Name" 
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                        />
                                         <label htmlFor="name">Your Name</label>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-floating">
-                                        <input type="email" className="form-control" required id="email" placeholder="Your Email" />
+                                        <input 
+                                            type="email" className="form-control" required id="email" placeholder="Your Email" 
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
                                         <label htmlFor="email">Your Email</label>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" className="form-control datetimepicker-input" required id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" />
+                                        <input type="text" className="form-control datetimepicker-input" required id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" 
+                                            value={dateTime}
+                                            onChange={(e) => setDateTime(e.target.value)}
+                                        />
                                         <label htmlFor="datetime">Date & Time</label> 
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-floating">
-                                        <select className="form-select" required id="select1">
-                                          <option value="1">People 1</option>
-                                          <option value="2">People 2</option>
-                                          <option value="3">People 3</option>
+                                        <select className="form-select" required id="select1"
+                                            value={peopleEat}
+                                            onChange={(e) => setPeopleEat(e.target.value)}
+                                        >
+                                          <option value="People 1">People 1</option>
+                                          <option value="People 2">People 2</option>
+                                          <option value="People 3">People 3</option>
                                         </select>
                                         <label htmlFor="select1">No Of People</label>
                                       </div>
                                 </div>
                                 <div className="col-12">
                                     <div className="form-floating">
-                                        <textarea className="form-control" placeholder="Special Request" id="message" style={{height: "100px"}}></textarea>
+                                        <textarea className="form-control" placeholder="Special Request" id="message" style={{height: "100px"}}
+                                            value={specialRequest}
+                                            onChange={(e) => setSpecialRequest(e.target.value)}
+                                        ></textarea>
                                         <label htmlFor="message">Special Request</label>
                                     </div>
                                 </div>
@@ -116,7 +160,12 @@ export default function Reservation() {
             </div>
         </div>
         {
-            orderSuccess && <Modal isShow={orderSuccess} title="You have successfully ordered your food" handlerShow={setOrderSuccess}></Modal>
+            orderSuccess && <Modal isShow={orderSuccess} title="Notifications" handlerShow={setOrderSuccess}>
+                <div className="container w-100 m-4">
+                    <h3>Hi {name.toLocaleUpperCase()}, you have booked your table</h3>
+                    <h6>Please check your email address: <a href='https://gmail.com' target="_blank" className='text-primary'>{email}</a> to see your meal infomation</h6>
+                </div>
+            </Modal>
         }
 
         {

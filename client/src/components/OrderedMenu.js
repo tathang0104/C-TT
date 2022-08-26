@@ -68,19 +68,23 @@ export const OrderedMenu = (props) => {
                         </h5>
                     </div>
                 </div>
-                <div className="d-flex flex-column">
-                    <div className='d-flex justify-content-between align-items-center text-white'>
-                        <div>{props.quantity} {props.quantity > 1 ? "products" : "product"} are available</div>
-                        <i className="fa fa-minus-square text-primary" onClick={()=>decreaseOrderedValue(quantityOrderedValue, props.menu_detail_id)}></i>
-                        <input type="text" readOnly={true} className='w-10 text-center' value={quantityOrderedValue} onChange={(e)=>handerChangeQuantity(e)} />
-                        <i className="fa fa-plus-square text-primary" onClick={()=>increaseOrderedValue(props.quantity, props.menu_detail_id)}></i>
-                        <div className="text-end w-25">
-                            <span className=''>Total: </span>
-                            <span className="w-15 text-end">{props.quantityOrdered * props.price } $</span>
+                <div className="d-flex flex-column text-white">
+                    <div className="row">
+                        <div className="col-md-6 col-sm-4">
+                            <div>{props.quantity} {props.quantity > 1 ? "products" : "product"} are available</div>
                         </div>
-                        <div><i className="bi bi-x-circle-fill text-primary" onClick={()=> handerDelete(props.menu_detail_id)}></i></div>
-                    </div>
+                        <div className='col-md-6 col-sm-8 d-flex justify-content-between align-items-center'>
+                            <i className="fa fa-minus-square text-primary" onClick={()=>decreaseOrderedValue(quantityOrderedValue, props.menu_detail_id)}></i>
+                            <input type="text" readOnly={true} className='w-10 text-center' value={quantityOrderedValue} onChange={(e)=>handerChangeQuantity(e)} />
+                            <i className="fa fa-plus-square text-primary" onClick={()=>increaseOrderedValue(props.quantity, props.menu_detail_id)}></i>
+                            <div className="text-end w-50">
+                                <span className=''>Total: {props.quantityOrdered * props.price } $</span>
+                                {/* <span className="w-25 text-end"></span> */}
+                            </div>
+                            <div><i className="bi bi-x-circle-fill text-primary" onClick={()=> handerDelete(props.menu_detail_id)}></i></div>
+                        </div>
                     <h6 className="d-flex w-100 err text-danger justify-content-end" id={`err-${props.menu_detail_id}`}>{null}</h6>
+                    </div>
                 </div>
             </div>
 
