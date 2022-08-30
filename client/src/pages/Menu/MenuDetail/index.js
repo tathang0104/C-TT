@@ -7,7 +7,7 @@ export const MenuDetail = (props) => {
 
   return (
     <>
-      <div className="col-lg-6" onClick={()=> addToCard(props.id)} >
+      <div className="col-lg-6 cursor-pointer" onClick={()=> addToCard(props.id)} >
         <div className="d-flex align-items-center detail-menu position-relative" id={`detail-menu-${props.id}`}>
           <div className="d-flex align-items-center justify-content-center position-absolute">
             <i className="fa fa-plus-circle fa-2x"></i>

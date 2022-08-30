@@ -74,14 +74,14 @@ export const OrderedMenu = (props) => {
                             <div>{props.quantity} {props.quantity > 1 ? "products" : "product"} are available</div>
                         </div>
                         <div className='col-md-6 col-sm-8 d-flex justify-content-between align-items-center'>
-                            <i className="fa fa-minus-square text-primary" onClick={()=>decreaseOrderedValue(quantityOrderedValue, props.menu_detail_id)}></i>
+                            <i className="fa fa-minus-square text-primary cursor-pointer" onClick={()=>decreaseOrderedValue(quantityOrderedValue, props.menu_detail_id)}></i>
                             <input type="text" readOnly={true} className='w-10 text-center' value={quantityOrderedValue} onChange={(e)=>handerChangeQuantity(e)} />
-                            <i className="fa fa-plus-square text-primary" onClick={()=>increaseOrderedValue(props.quantity, props.menu_detail_id)}></i>
+                            <i className="fa fa-plus-square text-primary cursor-pointer" onClick={()=>increaseOrderedValue(props.quantity, props.menu_detail_id)}></i>
                             <div className="text-end w-50">
                                 <span className=''>Total: {props.quantityOrdered * props.price } $</span>
                                 {/* <span className="w-25 text-end"></span> */}
                             </div>
-                            <div><i className="bi bi-x-circle-fill text-primary" onClick={()=> handerDelete(props.menu_detail_id)}></i></div>
+                            <div className="cursor-pointer"><i className="bi bi-x-circle-fill text-primary" onClick={()=> handerDelete(props.menu_detail_id)}></i></div>
                         </div>
                     <h6 className="d-flex w-100 err text-danger justify-content-end" id={`err-${props.menu_detail_id}`}>{null}</h6>
                     </div>

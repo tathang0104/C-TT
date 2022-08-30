@@ -384,6 +384,9 @@
     }
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
 #videoModal {
     z-index: 99999;
 }

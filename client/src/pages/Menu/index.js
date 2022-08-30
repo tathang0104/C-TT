@@ -146,9 +146,9 @@ export default function Menu() {
                     <div className='d-flex justify-content-around align-items-center'>
                     <div>{currentMeal.quantity} {currentMeal.quantity > 1 ? "products" : "product"} are available</div>
                         <div className="mr-2 text-end">Among: </div>
-                        <i className="fa fa-minus-square text-primary" onClick={()=>decrease(currentMeal)}></i>
+                        <i className="fa fa-minus-square text-primary cursor-pointer" onClick={()=>decrease(currentMeal)}></i>
                         <input type="text" readOnly={true} className='w-15 text-center' value={quantityValue} onChange={(e)=>handerChangeQuantity(e)} />
-                        <i className="fa fa-plus-square text-primary" onClick={()=>increase(currentMeal)}></i>
+                        <i className="fa fa-plus-square text-primary cursor-pointer" onClick={()=>increase(currentMeal)}></i>
                     </div>
                     <h6 className="d-flex w-100 error text-danger justify-content-end ">{null}</h6>
                     <div className="d-flex justify-content-end align-items-center" style={{height: "50px"}}>

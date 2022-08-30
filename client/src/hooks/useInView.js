@@ -13,7 +13,7 @@ const useInView = () => {
                    setIsInView(entries[0].isIntersecting) 
                }
         })
-        // console.log(rf)
+        console.log(rf)
        
         if(rf) observer.observe(rf)
 

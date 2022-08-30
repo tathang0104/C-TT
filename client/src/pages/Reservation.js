@@ -163,7 +163,7 @@ export default function Reservation() {
             orderSuccess && <Modal isShow={orderSuccess} title="Notifications" handlerShow={setOrderSuccess}>
                 <div className="container w-100 m-4">
                     <h3>Hi {name.toLocaleUpperCase()}, you have booked your table</h3>
-                    <h6>Please check your email address: <a href='https://gmail.com' target="_blank" className='text-primary'>{email}</a> to see your meal infomation</h6>
+                    <h6>Please check your email address: <a href='https://gmail.com' rel="noreferrer" target="_blank" className='text-primary'>{email}</a> to see your meal infomation</h6>
                 </div>
             </Modal>
         }
