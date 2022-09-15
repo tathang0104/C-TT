@@ -5,9 +5,19 @@ const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
 
 connectDB();
-
+// var bodyParser = require('body-parser');
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded());
+// // in latest body-parser use like below.
+// app.use(bodyParser.urlencoded({ extended: true }));
+var cookieParser = require("cookie-parser")
 app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
+app.use('/uploads', express.static('uploads'));
+
+// app.use(express.json());
 app.get("/", (req, res, next) => {
   res.send("Api running");
 });
@@ -16,6 +26,8 @@ app.get("/", (req, res, next) => {
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/private", require("./routes/private"));
 app.use("/api/client", require("./routes/client"));
+app.use("/api/product", require("./routes/product"));
+app.use("/api/order", require("./routes/order"));
 
 // Error Handler Middleware
 app.use(errorHandler);

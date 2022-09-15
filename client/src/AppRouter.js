@@ -16,20 +16,28 @@ import TeamMember from "./pages/TeamMember";
 import Testimonial from "./pages/Testimonial";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import { Layout } from "./layouts/Layout";
+import { ManageLayout } from "./layouts/ManageLayout";
+import User from "./pages/User";
+import Product from "./pages/Product";
+import Order from "./pages/Order";
+import EditUser from "./components/EditUser";
+import EditProduct from "./components/EditProduct";
+import ViewOrder from "./components/ViewOrder";
+import CreateProduct from "./components/CreateProduct";
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route exact index element={
-            <Home>
-              <Service />
-              <About />
-              <Menu />
-              <Reservation />
-              <TeamMember />
-              <Testimonial />
-            </Home> 
+          <Home>
+            <Service />
+            <About />
+            <Menu />
+            <Reservation />
+            <TeamMember />
+            <Testimonial />
+          </Home> 
         }/>
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -38,17 +46,30 @@ export const AppRouter = () => {
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/team" element={<TeamMember />} />
         <Route path="/testimonial" element={<Testimonial />} />
-
       </Route>
 
       <Route path="/dashboard" element={
         <PrivateRoute>
-          <Dasboard />
+          <ManageLayout />
         </PrivateRoute>
-      }/>
-        
-        
-        {/* authorization */}
+      }>
+        <Route exact index element={<Dasboard />}/>
+        <Route path='user'>
+          <Route exact index element={<User />}/>
+          <Route path='update/:id' element={<EditUser />} />
+        </Route>
+        <Route path='product'>
+          <Route exact index element={<Product />}/>
+          <Route path='create' element={<CreateProduct />} />
+          <Route path='update/:id' element={<EditProduct />} />
+        </Route>
+        <Route path='order'>
+          <Route exact index element={<Order />}/>
+          <Route path='view/:id' element={<ViewOrder />} />
+        </Route>
+      </Route>
+      
+      {/* authorization */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />

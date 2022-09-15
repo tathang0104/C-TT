@@ -4,7 +4,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './uploads/users');
+        cb(null, './uploads/products');
     },
     filename: function(req, file, cb) {
         console.log(file)
@@ -28,30 +28,20 @@ const upload = multer({
     fileFilter,
 });
 
-
 // Controllers
 const {
-  login,
-  register,
-  forgotPassword,
-  resetPassword,
-  updateUser,
-  getAllUsers,
-  getOneUser,
-} = require("../controllers/auth");
+    getAllProduct,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+} = require("../controllers/product");
 
-router.route("/register").post(register);
+router.route("/").get(getAllProduct);
 
-router.route("/login").post(login);
+router.route("/create").post(upload.single('product_photo'), createProduct);
 
-router.route("/forgotpassword").post(forgotPassword);
+router.route("/update/:_id").put(upload.single('product_photo'), updateProduct);
 
-router.route("/passwordreset/:resetToken").put(resetPassword);
-
-router.route("/").get(getAllUsers);
-
-router.route("/:_id").get(getOneUser);
-
-router.route("/updateprofile/:_id").put(upload.single('user_avatar'), updateUser);
+router.route("/delete/:_id").delete(deleteProduct);
 
 module.exports = router;

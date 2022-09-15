@@ -1,9 +1,7 @@
 const sendEmail = require("../utils/sendEmail");
 
-
-// @desc    Forgot Password Initialization
 exports.bookingtable = async (req, res, next) => {
-  // Send Email to email provided but first check if user exists
+  
   const { email, orders, name, dateTime, peopleEat, specialRequest } = req.body;
 
   try {

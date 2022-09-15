@@ -29,7 +29,7 @@ const Dasboard = () => {
     <span className="error-message">{error}</span>
   ) : (
     <div>{privateData}</div>
-  );
-};
+  )
+}
 
 export default Dasboard;

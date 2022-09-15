@@ -1,60 +1,61 @@
 const crypto = require("crypto");
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: [true, "Please provide username"],
+const UserSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: [true, "Please provide username"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please provide email address"],
+      unique: true,
+      match: [
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please provide a valid email",
+      ],
+    },
+    password: {
+      type: String,
+      required: [true, "Please add a password"],
+      minlength: 6,
+      select: false,
+    }, 
+    role: {
+      type: String,
+      enum: ["USER", "ADMIN"],
+      default: "USER"
+    },
+    avatar_url: {
+      type: String,
+      default: ''
+    },
+    avatar_path: {
+      type: String,
+      default: ''
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+      default: 'male'
+    },
+    dob: {
+      type: String,
+      default: ''
+    },
+    address: {
+      type: String,
+      default: ''
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
-  email: {
-    type: String,
-    required: [true, "Please provide email address"],
-    unique: true,
-    match: [
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please provide a valid email",
-    ],
-  },
-  password: {
-    type: String,
-    required: [true, "Please add a password"],
-    minlength: 6,
-    select: false,
-  }, 
-  avatarUrl: {
-    type: String,
-    default: ''
-  },
-  avatarPath: {
-    type: String,
-    default: ''
-  },
-  gender: {
-    type: String,
-    enum: ["male", "female",""],
-    default: ''
-  },
-  dob: {
-    type: Date,
-    default: ''
-  },
-  address: {
-    type: String,
-    default: ''
-  },
-  createdAt: {
-		type: Date,
-		default: Date.now
-	},
-  updatedAt: {
-		type: Date,
-		default: Date.now
-	}, 
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-});
+  { timestamps: true }
+);
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
@@ -89,6 +90,10 @@ UserSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 10 * (60 * 1000); // Ten Minutes
 
   return resetToken;
+};
+
+UserSchema.methods.getObjectId = function () {
+  return this.objectId
 };
 
 const User = mongoose.model("User", UserSchema);

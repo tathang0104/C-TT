@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
 const sendEmail = require("../utils/sendEmail");
+const fs = require("fs");
 
 // @desc    Login user
 exports.login = async (req, res, next) => {
@@ -35,7 +36,7 @@ exports.login = async (req, res, next) => {
 
 // @desc    Register user
 exports.register = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   try {
     const user = await User.create({
@@ -50,23 +51,60 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// @desc    Updated profile user
-exports.updateUser = async (req, res, next) => {
-  const { _id } = req.params._id;
+// @desc    Get all users
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const user = await User.find();
+
+    res.status(201).json({
+      success: true,
+      count: user.length,
+      data: user,
+    });
+
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Get user by id
+exports.getOneUser = async (req, res, next) => {
   
   try {
-    const user = await User.findOne({ _id });
+    const user = await User.findOne({ _id: req.params._id });
 
+    res.status(201).json({
+      success: true,
+      data: user,
+    });
+
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Updated profile user
+exports.updateUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.params._id });
+    console.log(user)
     if (!user) {
       return next(new ErrorResponse("You have no permissions to update", 401));
     }
+    if (user.avatar_url) {
+      fs.unlink(user.avatar_path, (err) => {
+        if (err) {
+          console.log("err", err)
+          return
+        }
+      })
+    }
 
-    user.avatarUrl = req.body.avatarUrl;
-    user.avatarPath = req.body.avatarPath;
+    user.avatar_url = process.env.LOCALHOST + req.file.path;
+    user.avatar_path = req.file.path;
     user.gender = req.body.gender;
     user.dob = req.body.dob;
     user.address = req.body.address;
-    user.updatedAt = new Date();
 
     await user.save();
 

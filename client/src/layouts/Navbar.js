@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import Banner from '../components/Banner'
 import Button from '../components/Button'
-import HeroBanner from '../components/HeroBanner'
 import CartContext from '../CartContext'
 
 
-export default function Navbar() {
+export default function Navbar({children}) {
 
     const { orders } = useContext(CartContext)
     const [isMenu, setIsMenu] = useState(false)
@@ -95,12 +93,7 @@ export default function Navbar() {
                 </div>
             </nav>
             
-            <div className="container-xxl py-5 bg-dark hero-header mb-5">
-                { pathName === "/" ?
-                    <HeroBanner /> :
-                    <Banner name={pathNameSlice}/>
-                }
-            </div>
+            { children }
         </div>
   )
 }
