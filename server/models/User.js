@@ -92,9 +92,9 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-UserSchema.methods.getObjectId = function () {
-  return this.objectId
-};
+// UserSchema.methods.getObjectId = function () {
+//   return this._id;
+// };
 
 const User = mongoose.model("User", UserSchema);
 

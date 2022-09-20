@@ -39,13 +39,13 @@ export const AppRouter = () => {
             <Testimonial />
           </Home> 
         }/>
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/service" element={<Service />} />
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/reservation" element={<Reservation />} />
-        <Route path="/team" element={<TeamMember />} />
-        <Route path="/testimonial" element={<Testimonial />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="service" element={<Service />} />
+        <Route path="menu" element={<Menu />} />
+        <Route path="reservation" element={<Reservation />} />
+        <Route path="team" element={<TeamMember />} />
+        <Route path="testimonial" element={<Testimonial />} />
       </Route>
 
       <Route path="/dashboard" element={

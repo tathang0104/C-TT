@@ -1,37 +1,32 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import { useDispatch, useSelector } from 'react-redux';
+import { login, getProfile } from '../redux/actions';
+import { currentUserLoginedToken } from "../redux/selectors";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  });
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const userLoginedToken = useSelector(currentUserLoginedToken);
   const navigate = useNavigate()
-
+  
   useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-     navigate("/dashboard")
+    if (localStorage.getItem("authToken") && userLoginedToken ) {
+      dispatch(getProfile.getProfileRequest(userLoginedToken));
+      navigate("/dashboard")
     }
-  }, [navigate]);
+  }, [dispatch, navigate, userLoginedToken]);
 
   const loginHandler = async (e) => {
     e.preventDefault();
-
-    const config = {
-      header: {
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
-      const { data } = await axios.post(
-        "/api/auth/login",
-        { email, password },
-        config
-      );
-
-      localStorage.setItem("authToken", data.token);
-      navigate("/dashboard")
+      dispatch(login.loginRequest(data));
+      console.log(1)
     } catch (error) {
       setError(error.response.data.error);
       setTimeout(() => {
@@ -52,8 +47,8 @@ function Login() {
             required
             id="email"
             placeholder="Email address"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={(e) => setData({ ...data, email: e.target.value })}
+            value={data.email}
             tabIndex={1}
           />
         </div>
@@ -70,8 +65,8 @@ function Login() {
             id="password"
             autoComplete="true"
             placeholder="Enter password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            onChange={(e) => setData({ ...data, password: e.target.value })}
+            value={data.password}
             tabIndex={2}
           />
         </div>

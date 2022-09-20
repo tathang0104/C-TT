@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { protect } = require("../middleware/auth");
 
 // Controllers
 const {
@@ -9,12 +10,12 @@ const {
     deleteOrder,
 } = require("../controllers/orderedMenu");
 
-router.route("/").get(getAllOrders);
+router.route("/").get(protect, getAllOrders);
 
-router.route("/create").post(createOrder);
+router.route("/create").post(protect, createOrder);
 
-router.route("/update/:_id").put(updateOrder);
+router.route("/update/:_id").put(protect, updateOrder);
 
-router.route("/delete/:_id").delete(deleteOrder);
+router.route("/delete/:_id").delete(protect, deleteOrder);
 
 module.exports = router;

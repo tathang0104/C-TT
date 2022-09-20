@@ -5,11 +5,6 @@ const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
 
 connectDB();
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded());
-// // in latest body-parser use like below.
-// app.use(bodyParser.urlencoded({ extended: true }));
 var cookieParser = require("cookie-parser")
 app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -17,6 +12,19 @@ app.use(express.json());
 
 app.use('/uploads', express.static('uploads'));
 
+// CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
+app.all('*', (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", process.env.LOCALHOST_FE);
+  next();
+});
+
+const cors = require('cors');
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions))
 // app.use(express.json());
 app.get("/", (req, res, next) => {
   res.send("Api running");

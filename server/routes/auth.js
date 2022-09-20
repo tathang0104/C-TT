@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require('multer');
+const { protect } = require("../middleware/auth");
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -44,14 +45,18 @@ router.route("/register").post(register);
 
 router.route("/login").post(login);
 
+router.route("/getprofile").get(protect, (req, res)=> {
+    res.send({user: req.user});
+} )
+
 router.route("/forgotpassword").post(forgotPassword);
 
 router.route("/passwordreset/:resetToken").put(resetPassword);
 
-router.route("/").get(getAllUsers);
+router.route("/").get(protect, getAllUsers);
 
-router.route("/:_id").get(getOneUser);
+router.route("/:_id").get(protect, getOneUser);
 
-router.route("/updateprofile/:_id").put(upload.single('user_avatar'), updateUser);
+router.route("/updateprofile/:_id").put(protect, upload.single('user_avatar'), updateUser);
 
 module.exports = router;

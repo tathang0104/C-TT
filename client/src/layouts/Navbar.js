@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 import CartContext from '../CartContext'
+
 
 
 export default function Navbar({children}) {
@@ -10,6 +11,7 @@ export default function Navbar({children}) {
     const [isMenu, setIsMenu] = useState(false)
     const [isDropDown, setIsDropDown] = useState(false)
 
+    const navigate = useNavigate();
     let location = useLocation()
     const pathName = location.pathname
     const pathNameSlice = pathName.slice(1)
@@ -32,6 +34,14 @@ export default function Navbar({children}) {
         setIsDropDown(false)
     }
     
+    const handleLogout = (e) => {
+        e.preventDefault()
+        if (localStorage.getItem('authToken')) {
+            localStorage.removeItem('authToken')
+            navigate("/")
+        }
+    }
+
     useEffect(()=> {
         const handleScroll =() => {
             const navbar = document.getElementById("navbar");
@@ -55,9 +65,8 @@ export default function Navbar({children}) {
     }, [])
 
     const show = isDropDown ? "show" : ""
+
     return (
-
-
     <div className="container-xxl position-relative p-0">
             <nav id="navbar" className="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
                 <Link to={"/"} className="navbar-brand p-0">
@@ -81,6 +90,11 @@ export default function Navbar({children}) {
                             </div>
                         </div>
                         <Link to={"/contact"} className={!contact ? "nav-item nav-link active" : "nav-item nav-link"}>Contact</Link>
+                        {
+                            !localStorage.getItem("authToken") 
+                            ? <Link to={"/login"} className={"nav-item nav-link"}>Login</Link>
+                            : <Link to={"/logout"} onClick={(e)=>handleLogout(e)} className={"nav-item nav-link"}>Logout</Link>
+                        }
                     </div>
                     <div className="px-2 py-4">
                         <Link to={"/reservation"}>

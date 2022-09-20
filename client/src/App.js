@@ -3,20 +3,35 @@ import { BrowserRouter as Router} from "react-router-dom";
 import GlobleStyle from "./GlobalStyle";
 import { AppRouter } from "./AppRouter";
 import { CartProvider } from "./CartContext";
-
+import { Provider } from "react-redux"
+import { createStore, applyMiddleware } from "redux"
+import createSagaMiddleware from "redux-saga"
+import reducers from "./redux/reducers";
+// import ProductSaga from "./redux/sagas";
+import ProductSaga from "./redux/sagas/product";
+import UserSaga from "./redux/sagas/user";
 import "./index.css";
+
+const sagaMiddleWare = createSagaMiddleware();
+
+const store = createStore(reducers, applyMiddleware(sagaMiddleWare));
+
+sagaMiddleWare.run(UserSaga);
+sagaMiddleWare.run(ProductSaga);
 
 function App() {
   return (
-    <CartProvider>
-      <GlobleStyle>
-        <Router>
-          <Fragment>
-            <AppRouter></AppRouter>
-          </Fragment>
-        </Router>
-      </GlobleStyle>
-    </CartProvider>
+    <Provider store={store}>
+      <CartProvider>
+        <GlobleStyle>
+          <Router>
+            <Fragment>
+              <AppRouter></AppRouter>
+            </Fragment>
+          </Router>
+        </GlobleStyle>
+      </CartProvider>
+    </Provider>
   );
 }
 

@@ -1,6 +1,16 @@
 const Product = require("../models/Product");
 const fs = require('fs')
 
+exports.getOneProduct = async (req, res, next) => {
+    // const product = await Product.findOne({_id: req.params._id});
+    // console.log(id)
+    try {
+      const product = await Product.findOne({_id: req.params._id});
+      res.status(200).json({ success: true, data: product });
+    } catch (err) {
+      next(err);
+    }
+};
 exports.getAllProduct = async (req, res, next) => {
 
     try {
@@ -24,6 +34,7 @@ exports.createProduct = async (req, res, next) => {
       });
       
       res.status(200).json({ success: true, data: product });
+      // res.redirect('/dashboard/product');
     } catch (err) {
       next(err);
     }
@@ -80,6 +91,7 @@ exports.deleteProduct = async (req, res, next) => {
     
         res.status(201).json({
           success: true,
+          data: product,
           message: "Product deleted",
         });
     

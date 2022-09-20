@@ -261,6 +261,15 @@
     display: none;
     color: #d26702;
 }
+.w-50 {
+    width: 50% !important;
+}
+.w-25 {
+    width: 25% !important;
+}
+.w-20 {
+    width: 20% !important;
+}
 .w-15 {
     width: 15% !important;
 }
@@ -576,3 +585,52 @@
         opacity: 1;
     }
 }
+
+.img-preview {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+}
+    /* .input-file-img {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        border-radius: 15px;
+        border: 1px dashed  black;
+    } */
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .custom-file-input::before {
+    content: 'Select product image';
+    width: 200px;
+    height: 200px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: center;
+    margin-right: 20px;
+    /* background: rgb(2,0,36); */
+    /* background: linear-gradient(50deg, rgba(2,0,36,1) 0%, rgba(158,168,86,0) 51%, rgba(0,212,255,1) 100%); */
+    background-image: url("https://www.freeiconspng.com/uploads/upload-icon-30.png");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+    border: 2px dashed #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    border-radius: 15px;
+    white-space: nowrap;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  .custom-file-input:hover::before {
+    border-color: black;
+  }
+  .custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }

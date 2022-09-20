@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from 'react-redux';
+// import { login, getProfile } from '../redux/actions';
+import { currentUserLogined } from "../redux/selectors";
 
 const Dasboard = () => {
   const [error, setError] = useState("");
   const [privateData, setPrivateData] = useState("");
+  const [dataUser, setDataUser] = useState(null);
+  const userLogined = useSelector(currentUserLogined);
+  console.log(userLogined?.user)
+  console.log(userLogined?.user.username)
+  useEffect(() => {
+    setDataUser(userLogined?.user)
+  },[userLogined])
 
   useEffect(() => {
     const fetchPrivateDate = async () => {
@@ -28,7 +38,10 @@ const Dasboard = () => {
   return error ? (
     <span className="error-message">{error}</span>
   ) : (
-    <div>{privateData}</div>
+    <>
+      { dataUser && <h1 className="text-primary">Hello {userLogined?.user.username} your email {userLogined?.user.email}</h1>}
+      <div>{privateData}</div>
+    </>
   )
 }
 
