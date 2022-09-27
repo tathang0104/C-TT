@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../redux/actions';
@@ -8,10 +8,15 @@ const Product = () => {
   const dispatch = useDispatch();
   const products = useSelector(productsState$);
   const navigate = useNavigate();
-
+  const [option, setOption] = useState({
+    page: 1,
+    size: 50,
+    category: '',
+  });
   useEffect(() => {
-    dispatch(actions.getProducts.getProductsRequest());
-  }, [dispatch]);
+    dispatch(actions.getProducts.getProductsRequest(option));
+    // dispatch(actions.getProducts.getProductsRequest());
+  }, [dispatch, option]);
 
   const handleEdit = (id) => {
     navigate(`update/${id}`)
@@ -22,10 +27,12 @@ const Product = () => {
     dispatch(actions.deleteProduct.deleteProductRequest(id))
   } 
 
-  console.log({products})
   return (
     <>
-      <Link to={'create'} className="btn btn-primary">Create Product</Link>
+      <div className='d-flex justify-content-between align-items-center'>
+        <h1 className='text-primary'>Product list</h1>
+        <Link to={'create'} className="btn btn-primary">Add new product</Link>
+      </div>
       <table className="table table-striped mt-3">
         <thead>
           <tr>
@@ -40,10 +47,10 @@ const Product = () => {
         </thead>
         <tbody>
           {
-            products.map((product, index) => {
+            products.map((product) => {
               return (
                 <tr key={product._id}>
-                  <th scope="row">{index+1}</th>
+                  <td>{product._id}</td>
                   <td>{product.name}</td>
                   <td>{product.description}</td>
                   <td>{product.price}</td>
@@ -52,8 +59,8 @@ const Product = () => {
                   </td>
                   <td>{product.category}</td>
                   <td>
-                    <img style={{height: '25px', width: '25px'}} src='/img/edit.png' alt="" className='p-1' onClick={() => handleEdit(product._id)}/>
-                    <img style={{height: '25px', width: '25px'}} src='/img/delete.png' alt="" className='p-1' onClick={() => {if (window.confirm('Are you sure to delete this product?')) {handleDelete(product._id)}}}/>
+                    <img style={{height: '25px', width: '25px'}} src='/img/edit.png' alt="" className='p-1 cursor-pointer' onClick={() => handleEdit(product._id)}/>
+                    <img style={{height: '25px', width: '25px'}} src='/img/delete.png' alt="" className='p-1 cursor-pointer' onClick={() => {if (window.confirm('Are you sure to delete this product?')) {handleDelete(product._id)}}}/>
                   </td>
                 </tr>
               )

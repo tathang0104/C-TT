@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-// import { login, getProfile } from '../redux/actions';
 import { currentUserLogined } from "../redux/selectors";
 
 const Dasboard = () => {
@@ -9,8 +9,7 @@ const Dasboard = () => {
   const [privateData, setPrivateData] = useState("");
   const [dataUser, setDataUser] = useState(null);
   const userLogined = useSelector(currentUserLogined);
-  console.log(userLogined?.user)
-  console.log(userLogined?.user.username)
+  const navigate = useNavigate()
   useEffect(() => {
     setDataUser(userLogined?.user)
   },[userLogined])
@@ -30,11 +29,12 @@ const Dasboard = () => {
       } catch (error) {
         localStorage.removeItem("authToken");
         setError("You are not authorized please login");
+        navigate("/")
       }
     };
 
     fetchPrivateDate();
-  }, []);
+  }, [navigate]);
   return error ? (
     <span className="error-message">{error}</span>
   ) : (

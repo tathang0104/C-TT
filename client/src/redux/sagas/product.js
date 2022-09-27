@@ -4,7 +4,7 @@ import * as api from '../../api';
 
 function* fetchProductsSaga(action) {
   try {
-    const products = yield call(api.fetchProducts);
+    const products = yield call(api.fetchProducts, action.payload);
     yield put(actions.getProducts.getProductsSuccess(products.data));
   } catch (err) {
     console.error(err);
@@ -26,7 +26,7 @@ function* createProductSaga(action) {
   try {
     const products = yield call(api.createProduct, action.payload);
     yield put(actions.createProduct.createProductSuccess(products.data));
-    yield fetchProductsSaga();
+    // yield fetchProductsSaga({page:1, size:5});
   } catch (err) {
     console.error(err);
     yield put(actions.createProduct.createProductFailure(err));
@@ -44,15 +44,11 @@ function* updateProductSaga(action) {
 
 function* deleteProductSaga(action) {
   try {
-    console.log(action.payload)
     const deletedProduct = yield call(api.deleteProduct, action.payload );
-    console.log(action.payload)
     console.log(deletedProduct.data.data._id)
-    // yield put(actions.deleteProduct.deleteProductRequest(deletedProduct.data.data._id));
-    yield fetchProductsSaga()
+    yield fetchProductsSaga({page: 1, size: 5})
   } catch (err) {
     console.error(err);
-    console.log(action.payload)
     yield put(actions.deleteProduct.deleteProductFailure(err));
   }
 }

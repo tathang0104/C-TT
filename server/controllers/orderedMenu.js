@@ -1,24 +1,112 @@
 const OrderedMenu = require("../models/OrderedMenu");
 
-exports.getAllOrders = async (req, res, next) => {
-
+exports.getOneOrder = async (req, res, next) => {
   try {
-    const order = await OrderedMenu.find({});
-    res.status(200).json({ success: true, count: order.length, data: order });
+    const order = await OrderedMenu.findOne({_id: req.params._id})
+    .populate('user_id')
+    .populate({
+      path: 'detail_order.product_id',
+      select:
+        'name price photo_url category',
+    });
+    res.status(200).json({ success: true, data: order });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.searchOrder = async (req, res, next) => {
+  let page = parseInt(req.query.page) || 1
+  let size = parseInt(req.query.size) || 5
+  let search = req.query.search || ""
+  // const user_id = 63228f8dfb22f650b2f731e4;
+  console.log(req.query)
+  console.log("hihihi")
+  try {
+    const  order = await OrderedMenu
+    .find()
+    .populate({
+      path: 'user_id',
+      match: { username: { $regex: search, $options: "i" }},
+      // // username: 'thangahihi',
+      select:
+        'username',
+    })
+    .populate({
+      path: 'detail_order.product_id',
+      select:
+        'name price photo_url category',
+    })
+    .skip((size * page) - size).limit(size)
+    
+    const newOrder = order.filter(order => order.user_id !== null);
+
+    
+    
+    res.status(200).json({ success: true, count:newOrder.length, data: newOrder , page , size});
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+exports.getSelfOrder = async (req, res, next) => {
+  let page = parseInt(req.query.page) || 1
+  let size = parseInt(req.query.size) || 5
+  try {
+    // const order = await OrderedMenu.find();
+    const order = await OrderedMenu.find({user_id: req.user._id})
+    .populate({
+      path: 'user_id',
+      select:
+        'username',
+    })
+    .populate({
+      path: 'detail_order.product_id',
+      select:
+        'name price photo_url category',
+    })
+    .skip((size * page) - size)
+    .limit(size)
+
+    res.status(200).json({ success: true, count: order.length, data: order ,page ,size});
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getAllOrders = async (req, res, next) => {
+  let page = parseInt(req.query.page) || 1
+  let size = parseInt(req.query.size) || 5
+  try {
+    const order = await OrderedMenu.find()
+    .populate({
+      path: 'user_id',
+      select:
+        'username',
+    })
+    .populate({
+      path: 'detail_order.product_id',
+      select:
+        'name price photo_url category',
+    })
+    .skip((size * page) - size)
+    .limit(size);
+    res.status(200).json({ success: true, count: order.length, data: order, page, size });
   } catch (err) {
     next(err);
   }
 };
 
 exports.createOrder = async (req, res, next) => {
-  const { user_id, ordered_time, special_request, detail_ordered_menu } = req.body; 
+  const {  order_time, special_request, detail_order } = req.body; 
 
   try {
     const order = await OrderedMenu.create({
-      user_id,
-      ordered_time,
+      user_id : req.user._id,
+      order_time,
       special_request,
-      detail_ordered_menu,
+      detail_order,
     });
     
     res.status(200).json({ success: true, data: order });
@@ -36,9 +124,9 @@ exports.updateOrder = async (req, res, next) => {
           return next(new ErrorResponse("You have no permissions to update", 401));
         }
     
-        order.ordered_time = req.body.ordered_time;
+        order.order_time = req.body.order_time;
         order.special_request = req.body.special_request;
-        order.detail_ordered_menu = req.body.detail_ordered_menu;
+        order.detail_order = req.body.detail_order;
     
         await order.save();
     

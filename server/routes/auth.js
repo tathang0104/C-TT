@@ -39,6 +39,9 @@ const {
   updateUser,
   getAllUsers,
   getOneUser,
+  searchUser,
+  createUser,
+  deleteUser,
 } = require("../controllers/auth");
 
 router.route("/register").post(register);
@@ -55,8 +58,14 @@ router.route("/passwordreset/:resetToken").put(resetPassword);
 
 router.route("/").get(protect, getAllUsers);
 
+router.route("/search").get(protect, searchUser);
+
 router.route("/:_id").get(protect, getOneUser);
 
+router.route("/create").post(protect, createUser);
+
 router.route("/updateprofile/:_id").put(protect, upload.single('user_avatar'), updateUser);
+
+router.route("/delete/:_id").delete(protect, deleteUser);
 
 module.exports = router;

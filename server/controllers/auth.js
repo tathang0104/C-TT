@@ -43,6 +43,7 @@ exports.register = async (req, res, next) => {
       username,
       email,
       password,
+      role,
     });
 
     sendToken(user, 200, res);
@@ -51,15 +52,56 @@ exports.register = async (req, res, next) => {
   }
 };
 
+exports.createUser = async (req, res, next) => {
+  const { username, email, password, role } = req.body;
+
+  try {
+    const user = await User.create({
+      username,
+      email,
+      password,
+      role,
+    });
+
+    res.status(200).json({ success: true, data: user });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.searchUser = async (req, res, next) => {
+  let page = parseInt(req.query.page) || 1
+  let size = parseInt(req.query.size) || 5
+  let search = req.query.search || ""
+
+  console.log(req.query)
+  try {
+    const  user = await User.find({
+        "$or": [
+          {username: { $regex: search }},
+          {email: { $regex: search }},
+        ]
+      }).skip((size * page) - size).limit(size);
+    
+    res.status(200).json({ success: true, count:user.length, data: user , page , size});
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc    Get all users
 exports.getAllUsers = async (req, res, next) => {
+  let page = parseInt(req.query.page) || 1
+  let size = parseInt(req.query.size) || 5
   try {
-    const user = await User.find();
+    const user = await User.find().skip((size * page) - size).limit(size);
 
     res.status(201).json({
       success: true,
       count: user.length,
       data: user,
+      page,
+      size,
     });
 
   } catch (err) {
@@ -119,6 +161,37 @@ exports.updateUser = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.deleteUser = async (req, res, next) => {
+
+  try {
+      const user = await User.findOne({ _id: req.params._id });
+  
+      if (!user) {
+        return next(new ErrorResponse("You have no permissions to delete", 401));
+      }
+
+      if (user.avatar_path) {
+        fs.unlink(user.avatar_path, (err) => {
+          if (err) {
+            console.log(err)
+            return
+          }
+        })
+      }
+  
+      await user.delete();
+  
+      res.status(201).json({
+        success: true,
+        data: user,
+        message: "User deleted",
+      });
+  
+    } catch (err) {
+      next(err);
+    }
 };
 
 // @desc    Forgot Password Initialization

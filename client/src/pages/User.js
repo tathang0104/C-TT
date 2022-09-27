@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../redux/actions';
 import { usersState } from '../redux/selectors';
@@ -18,14 +18,15 @@ const User = () => {
   } 
   
   const handleDelete = (id) => {
-    console.log(id)
-    // dispatch(actions.deleteProduct.deleteProductRequest(id))
+    dispatch(actions.deleteUser.deleteUserRequest(id))
   } 
 
-  console.log({users})
   return (
     <>
-      <h1 className="text-primary">User list</h1>
+      <div className='d-flex justify-content-between align-items-center'>
+        <h1 className="text-primary">User list</h1>
+        <Link className='btn btn-primary' to={'create'}>Add new user</Link>
+      </div>
       <table className="table table-striped mt-3">
         <thead>
           <tr>
@@ -43,7 +44,7 @@ const User = () => {
             users.map((user, index) => {
               return (
                 <tr key={user._id}>
-                  <th scope="row">{index+1}</th>
+                  <th scope="row">{user._id.slice(-6)}</th>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.gender}</td>

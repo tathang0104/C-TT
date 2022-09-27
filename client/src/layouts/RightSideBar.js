@@ -1,6 +1,10 @@
-// import { useEffect, useRef, useState } from 'react';
+
 import clsx from 'clsx';
 import { Link, useLocation } from 'react-router-dom';
+import { AiOutlineDashboard } from 'react-icons/ai'
+import { FaUserAlt } from 'react-icons/fa'
+import { SiProducthunt } from 'react-icons/si'
+import { TiShoppingCart } from 'react-icons/ti'
 import "./RightSidebar.css"
 
 const RightSideBar = () => {
@@ -18,7 +22,7 @@ const RightSideBar = () => {
                     <Link to={'/dashboard'}>
                         <div className={clsx("sidebar-menu-item", {"sidebar-active": pathNameSlice})}>
                             <div className={clsx("sidebar-menu-item-icon")}>
-                                <i className='fa fa-user'></i>
+                                <AiOutlineDashboard />
                             </div>
                             <div className="sidebar-menu-item-text">Dashboard</div>
                         </div>
@@ -26,7 +30,7 @@ const RightSideBar = () => {
                     <Link to={'/dashboard/user'}>
                         <div className={clsx("sidebar-menu-item", {"sidebar-active": user})}>
                             <div className={clsx("sidebar-menu-item-icon")}>
-                                <i className='fa fa-user'></i>
+                                <FaUserAlt />
                             </div>
                             <div className="sidebar-menu-item-text">User</div>
                         </div>
@@ -34,7 +38,7 @@ const RightSideBar = () => {
                     <Link to={'/dashboard/product'}>
                         <div className={clsx("sidebar-menu-item", {"sidebar-active": product})}>
                             <div className={clsx("sidebar-menu-item-icon")}>
-                                <i className='fa fa-user'></i>
+                                <SiProducthunt />
                             </div>
                             <div className="sidebar-menu-item-text">Product</div>
                         </div>
@@ -42,7 +46,7 @@ const RightSideBar = () => {
                     <Link to={'/dashboard/order'}>
                         <div className={clsx("sidebar-menu-item", {"sidebar-active": order})}>
                             <div className={clsx("sidebar-menu-item-icon")}>
-                                <i className='fa fa-user'></i>
+                                <TiShoppingCart />
                             </div>
                             <div className="sidebar-menu-item-text">Order</div>
                         </div>

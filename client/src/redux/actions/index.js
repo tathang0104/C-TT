@@ -11,6 +11,18 @@ export const login = createActions({
   loginFailure: (err) => err,
 });
 
+export const logout = createActions({
+  logoutRequest: undefined,
+  logoutSuccess: (payload) => payload,
+  logoutFailure: (err) => err,
+});
+
+export const createUser = createActions({
+  createUserRequest: (payload) => payload,
+  createUserSuccess: (payload) => payload,
+  createUserFailure: (err) => err,
+});
+
 export const getProfile = createActions({
   getProfileRequest: (payload) => payload,
   getProfileSuccess: (payload) => payload,
@@ -49,7 +61,7 @@ export const getOneProduct = createActions({
 });
 
 export const getProducts = createActions({
-  getProductsRequest: undefined,
+  getProductsRequest: (payload) => payload,
   getProductsSuccess: (payload) => payload,
   getProductsFailure: (err) => err,
 });

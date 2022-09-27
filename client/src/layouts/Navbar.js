@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
+import { logout } from '../redux/actions'
 import CartContext from '../CartContext'
+import { currentUserLogined } from '../redux/selectors'
+import { useDispatch, useSelector } from 'react-redux'
+import { RiLogoutBoxRLine } from 'react-icons/ri'
+import { ImProfile } from 'react-icons/im'
 
 
 
@@ -10,7 +15,11 @@ export default function Navbar({children}) {
     const { orders } = useContext(CartContext)
     const [isMenu, setIsMenu] = useState(false)
     const [isDropDown, setIsDropDown] = useState(false)
+    const [isShowProfile, setIsShowProfile] = useState(false)
+    const [userLogined, setUserLogined] = useState(null)
+    const data = useSelector(currentUserLogined)
 
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     let location = useLocation()
     const pathName = location.pathname
@@ -22,7 +31,7 @@ export default function Navbar({children}) {
     const team = pathName.indexOf('/team')
     const testimonial = pathName.indexOf('/testimonial')
     const contact = pathName.indexOf('/contact')
-
+    
     const showMenu = () => {
         setIsMenu(!isMenu)
     }
@@ -30,17 +39,38 @@ export default function Navbar({children}) {
     const showDropdown = () => {
         setIsDropDown(true)
     }
+
     const hideDropdown = () => {
         setIsDropDown(false)
+
+    }
+
+    const showProfile = () => {
+        setIsShowProfile(true)
+    }
+    
+    const hideProfile = () => {
+        setIsShowProfile(false)
     }
     
     const handleLogout = (e) => {
         e.preventDefault()
         if (localStorage.getItem('authToken')) {
+            dispatch(logout.logoutRequest())
             localStorage.removeItem('authToken')
             navigate("/")
         }
     }
+
+    useEffect(()=>{
+        setUserLogined(data?.user)
+    }, [data])
+
+    // useEffect(() => {
+    //     if(!localStorage.getItem("authToken")) {
+    //       navigate("/")
+    //     }
+    // }, [navigate]);
 
     useEffect(()=> {
         const handleScroll =() => {
@@ -65,6 +95,7 @@ export default function Navbar({children}) {
     }, [])
 
     const show = isDropDown ? "show" : ""
+    const profile = isShowProfile ? "show" : ""
 
     return (
     <div className="container-xxl position-relative p-0">
@@ -93,7 +124,7 @@ export default function Navbar({children}) {
                         {
                             !localStorage.getItem("authToken") 
                             ? <Link to={"/login"} className={"nav-item nav-link"}>Login</Link>
-                            : <Link to={"/logout"} onClick={(e)=>handleLogout(e)} className={"nav-item nav-link"}>Logout</Link>
+                            : <Link to={"/dashboard"} className={"nav-item nav-link"}>dashboard</Link>
                         }
                     </div>
                     <div className="px-2 py-4">
@@ -104,6 +135,24 @@ export default function Navbar({children}) {
                             </Button>
                         </Link>
                     </div>
+                    { userLogined && localStorage.getItem('authToken') &&
+                        <div className={"nav-item dropdown" + profile} onMouseEnter={showProfile} onMouseLeave={hideProfile} >
+                            <Link to={"#profile"} className="nav-link dropdown-toggle text-white" style={{padding: "20px 0px 20px 20px", fontWeight: "500"}} data-bs-toggle="dropdown">
+                                {
+                                    userLogined?.avatar_url ? (
+                                        <img src={`http://${userLogined?.avatar_url}`} alt="user_avt" className='avatar-img'/>
+                                    ) : (
+                                        <img src='/img/default-avatar.jpg' alt="user_avt" className='avatar-img'/>
+                                    )
+                                }
+                                { userLogined && userLogined?.username }
+                            </Link>
+                            <div className={"dropdown-menu m-0 " + profile} style={{}}>
+                                <Link to={"/dashboard/profile"} className={"dropdown-item"}><ImProfile style={{marginRight: "10px"}} />Profile</Link>
+                                <Link to={"/logout"} onClick={(e)=>handleLogout(e)} className={"dropdown-item"} style={{borderTop: "1px solid #FEA116"}}><RiLogoutBoxRLine style={{marginRight: "10px"}}/>Logout</Link>
+                            </div>  
+                        </div>
+                    }
                 </div>
             </nav>
             

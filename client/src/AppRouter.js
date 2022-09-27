@@ -24,6 +24,8 @@ import EditUser from "./components/EditUser";
 import EditProduct from "./components/EditProduct";
 import ViewOrder from "./components/ViewOrder";
 import CreateProduct from "./components/CreateProduct";
+import { Profile } from "./components/Profile";
+import { CreateUser } from "./components/CreateUser";
 
 export const AppRouter = () => {
   return (
@@ -54,8 +56,14 @@ export const AppRouter = () => {
         </PrivateRoute>
       }>
         <Route exact index element={<Dasboard />}/>
+        <Route path="profile" element={<Profile />} />
+        
         <Route path='user'>
+          {
+            
+          }
           <Route exact index element={<User />}/>
+          <Route path='create' element={<CreateUser />} />
           <Route path='update/:id' element={<EditUser />} />
         </Route>
         <Route path='product'>

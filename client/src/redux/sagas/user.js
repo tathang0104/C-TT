@@ -17,6 +17,16 @@ function* loginSaga(action) {
   }
 }
 
+function* logoutSaga(action) {
+  try {
+    localStorage.removeItem("authToken");
+    yield put(actions.logout.logoutSuccess());
+  } catch (err) {
+    console.error(err);
+    yield put(actions.logout.logoutFailure(err));
+  }
+}
+
 function* getUserlogined(action) {
   try {
     const userProfile = yield call(api.getProfile, action.payload);
@@ -50,9 +60,9 @@ function* fetchOneUserSaga(action) {
   }
 }
 
-// function* createProductSaga(action) {
+// function* createUserSaga(action) {
 //   try {
-//     const products = yield call(api.createProduct, action.payload);
+//     const user = yield call(api.createProduct, action.payload);
 //     yield put(actions.createProduct.createProductSuccess(products.data));
 //   } catch (err) {
 //     console.error(err);
@@ -72,11 +82,9 @@ function* updateProfileUserSaga(action) {
 
 function* deleteUserSaga(action) {
   try {
-    console.log(action.payload)
     const deletedUser = yield call(api.deleteUser, action.payload );
-    // yield put(actions.deleteProduct.deleteProductRequest(deletedProduct.data.data._id));
     console.log(deletedUser.data)
-    yield fetchAllUsersSaga()
+    yield fetchAllUsersSaga({page: 1, size: 5})
   } catch (err) {
     console.error(err);
     yield put(actions.deleteUser.deleteUserFailure(err));
@@ -85,6 +93,7 @@ function* deleteUserSaga(action) {
 
 function* UserSaga() {
   yield takeLatest(actions.getType(actions.login.loginRequest) , loginSaga);
+  yield takeLatest(actions.getType(actions.logout.logoutRequest) , logoutSaga);
   yield takeLatest(actions.getType(actions.getProfile.getProfileRequest) , getUserlogined);
   yield takeLatest(actions.getType(actions.getAllUsers.getAllUsersRequest) , fetchAllUsersSaga);
   yield takeLatest(actions.getType(actions.getOneUser.getOneUserRequest) , fetchOneUserSaga);

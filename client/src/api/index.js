@@ -10,12 +10,12 @@ const config = {
   },
 };
 
-// const configAuth = {
-//   headers: {
-//     "Content-Type": "application/json",
-//     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-//   },
-// };
+const configAuth = {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+}
 
 //Auth
 export const login = (payload) => axios.post(`${User_URL}/login`, payload, config);
@@ -35,65 +35,66 @@ export const fetchAllUsers = () => axios.get(`${User_URL}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
-});
+  }
+})
+
 
 export const fetchOneUser = (payload) => axios.get(`${User_URL}/${payload}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 export const updateUser = (payload) => axios.put(`${User_URL}/updateprofile/${payload.get('_id')}`, payload, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 export const deleteUser = (id) => axios.delete(`${User_URL}/delete/${id}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 
 // Product
-export const fetchProducts = () => axios.get(`${Product_URL}`, {
+export const fetchProducts = (payload) => axios.get(`${Product_URL}?page=${payload.page}&size=${payload.size}&category=${payload.category}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 export const fetchOneProduct = (payload) => axios.get(`${Product_URL}/${payload}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 export const createProduct = (payload) => axios.post(`${Product_URL}/create`, payload, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 export const updateProduct = (payload) => axios.put(`${Product_URL}/update/${payload.get('_id')}`, payload, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 export const deleteProduct = (id) => axios.delete(`${Product_URL}/delete/${id}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  },
+  }
 });
 
 

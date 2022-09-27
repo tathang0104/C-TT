@@ -96,7 +96,7 @@ const EditUser = () => {
                     type="text"
                     className="form-control"
                     id="username"
-                    value={data && data?.username}
+                    value={data?.username || ''}
                     placeholder="User Name"
                     onChange={(e) => setData({ ...data, username: e.target.value })}
                   />
@@ -109,7 +109,7 @@ const EditUser = () => {
                     type="email"
                     className="form-control"
                     id="email"
-                    value={data && data?.email}
+                    value={data?.email || ''}
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                     placeholder="Email"
                     readOnly={true}
@@ -125,7 +125,7 @@ const EditUser = () => {
                     type="text"
                     className="form-control"
                     id="gender"
-                    value={data && data?.gender}
+                    value={data?.gender || ''}
                     placeholder="Gender"
                     onChange={(e) => setData({ ...data, gender: e.target.value })}
                   />
@@ -138,12 +138,38 @@ const EditUser = () => {
                     type="text"
                     className="form-control"
                     id="role"
-                    value={data && data?.role}
+                    value={data?.role || ''}
                     onChange={(e) => setData({ ...data, role: e.target.value })}
                     placeholder="Role"
                     readOnly={true}
                   />
                   <label htmlFor="role">Role</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="dob"
+                    value={data?.dob || ''}
+                    placeholder="DOB"
+                    onChange={(e) => setData({ ...data, dob: e.target.value })}
+                  />
+                  <label htmlFor="dob">DOB</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="address"
+                    value={data?.address || ''}
+                    onChange={(e) => setData({ ...data, address: e.target.value })}
+                    placeholder="Address"
+                  />
+                  <label htmlFor="address">Address</label>
                 </div>
               </div>
               <div className="col-6">

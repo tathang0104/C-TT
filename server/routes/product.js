@@ -36,9 +36,12 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
+    searchProduct,
 } = require("../controllers/product");
 
-router.route("/").get(protect, getAllProduct);
+router.route("/").get(getAllProduct);
+
+router.route("/search").get(searchProduct);
 
 router.route("/:_id").get(protect, getOneProduct);
 

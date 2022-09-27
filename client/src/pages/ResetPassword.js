@@ -52,46 +52,65 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="resetpassword-screen">
-      <form
-        onSubmit={resetPasswordHandler}
-        className="resetpassword-screen__form"
-      >
-        <h3 className="resetpassword-screen__title">Forgot Password</h3>
-        {error && <span className="error-message">{error} </span>}
-        {success && (
-          <span className="success-message">
-            {success} <Link to="/login">Login</Link>
-          </span>
-        )}
-        <div className="form-group">
-          <label htmlFor="password">New Password:</label>
-          <input
-            type="password"
-            required
-            id="password"
-            placeholder="Enter new password"
-            autoComplete="true"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+    <div className="login-screen">
+      <div className="container">
+        <div className="row align-items-center">
+          <div className="col-md-8">
+            <div className="back-ground"></div>
+          </div>
+          <div className="col-md-4">
+            <form
+              onSubmit={resetPasswordHandler}
+              className="login-screen__form"
+            >
+              <h3 className="login-screen__title text-primary">Forgot Password</h3>
+              {error && <span className="error-message">{error} </span>}
+              {success && (
+                <span className="success-message">
+                  {success} <Link to="/login">Login</Link>
+                </span>
+              )}
+              <div className="row">
+                <div className="col-md-12 mt-3 mb-4">
+                  <div className="form-floating">
+                    <input
+                      className="form-control"
+                      type="password"
+                      required
+                      id="password"
+                      placeholder="Enter new password"
+                      autoComplete="true"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      tabIndex={1}
+                    />
+                    <label htmlFor="password">New Password:</label>
+                  </div>
+                </div>
+                <div className="col-md-12 mt-3 mb-4">
+                  <div className="form-floating">
+                    <input
+                      className="form-control"
+                      type="password"
+                      required
+                      id="confirmpassword"
+                      placeholder="Confirm new password"
+                      autoComplete="true"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      tabIndex={2}
+                    />
+                    <label htmlFor="password">New Password:</label>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" className="btn btn-primary mb-2" style={{padding: "12px", fontSize: "20px"}}>
+                Reset Password
+              </button>
+            </form>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="confirmpassword">Confirm New Password:</label>
-          <input
-            type="password"
-            required
-            id="confirmpassword"
-            placeholder="Confirm new password"
-            autoComplete="true"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Reset Password
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

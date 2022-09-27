@@ -110,7 +110,7 @@ export default function Menu() {
         </div>
         <div className='d-flex justify-content-center menu-search'>
             <form className='d-flex justify-content-center align-items-center mb-4' onSubmit={(e) => handerSubmit(e)}>
-                <i className='fa fa-search text-primary'></i>
+                <i className='fa fa-search text-primary' style={{fontSize: "16px"}}></i>
                 <input type="text" className="" placeholder="Search" value={inputSearch} onChange={(e) => handerChange(e)}/>
             </form>
         </div>

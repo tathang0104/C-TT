@@ -1,5 +1,5 @@
 import { INIT_STATE } from '../../constant';
-import { getType, login, getOneUser, getAllUsers, updateProfileUser, deleteUser, getProfile } from '../actions'
+import { getType, login, logout, getOneUser, getAllUsers, updateProfileUser, deleteUser, getProfile, createUser } from '../actions'
 
 export default function usersReducers(state = INIT_STATE.user, action) {
   switch (action.type) {
@@ -37,6 +37,25 @@ export default function usersReducers(state = INIT_STATE.user, action) {
         isLoading: false,
         currentUserLoginedToken: null,
       };
+    case getType(logout.logoutRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(logout.logoutSuccess):
+      return {
+        ...state,
+        isLoading: true,
+        data: [],
+        currentData: null,
+        currentUserLogined: null,
+        currentUserLoginedToken: null,
+      };
+    case getType(logout.logoutFailure):
+      return {
+        ...state,
+        isLoading: false,
+      };
     case getType(getOneUser.getOneUserRequest):
       return {
         ...state,
@@ -70,11 +89,11 @@ export default function usersReducers(state = INIT_STATE.user, action) {
         ...state,
         isLoading: false,
       };
-    // case getType(createProduct.createProductSuccess):
-    //   return {
-    //     ...state,
-    //     data: [...state.data, action.payload],
-    //   };
+    case getType(createUser.createUserSuccess):
+      return {
+        ...state,
+        data: [...state.data, action.payload],
+      };
     case getType(updateProfileUser.updateProfileUserSuccess):
       return {
         ...state,
@@ -85,8 +104,8 @@ export default function usersReducers(state = INIT_STATE.user, action) {
     case getType(deleteUser.deleteUserSuccess):
       return {
         ...state,
-        data: state.data.filter((product) =>
-          product._id === action.payload
+        data: state.data.filter((user) =>
+          user._id === action.payload
         ),
       };
     default:
