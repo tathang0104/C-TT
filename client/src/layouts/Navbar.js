@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
-import { logout } from '../redux/actions'
+import { logout, getProfile } from '../redux/actions'
 import CartContext from '../CartContext'
-import { currentUserLogined } from '../redux/selectors'
+import { currentUserLogined, currentUserLoginedToken } from '../redux/selectors'
 import { useDispatch, useSelector } from 'react-redux'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 import { ImProfile } from 'react-icons/im'
@@ -18,6 +18,7 @@ export default function Navbar({children}) {
     const [isShowProfile, setIsShowProfile] = useState(false)
     const [userLogined, setUserLogined] = useState(null)
     const data = useSelector(currentUserLogined)
+    const userLoginedToken = useSelector(currentUserLoginedToken);
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -66,11 +67,11 @@ export default function Navbar({children}) {
         setUserLogined(data?.user)
     }, [data])
 
-    // useEffect(() => {
-    //     if(!localStorage.getItem("authToken")) {
-    //       navigate("/")
-    //     }
-    // }, [navigate]);
+    useEffect(() => {
+        if (localStorage.getItem('authToken'))
+            dispatch(getProfile.getProfileRequest(localStorage.getItem('authToken')));
+      }, [dispatch, userLoginedToken]);
+    
 
     useEffect(()=> {
         const handleScroll =() => {

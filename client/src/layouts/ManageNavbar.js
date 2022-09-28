@@ -20,7 +20,7 @@ export default function ManageNavbar() {
     const profile = pathName.indexOf('/profile')
     const data = useSelector(currentUserLogined)
     const userLoginedToken = useSelector(currentUserLoginedToken);
-
+  
 
     const showDropdown = () => {
         setIsDropDown(true)
