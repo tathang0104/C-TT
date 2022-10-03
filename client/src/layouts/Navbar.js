@@ -12,7 +12,7 @@ import { ImProfile } from 'react-icons/im'
 
 export default function Navbar({children}) {
 
-    const { orders } = useContext(CartContext)
+    const { orders, setOrdersContext } = useContext(CartContext)
     const [isMenu, setIsMenu] = useState(false)
     const [isDropDown, setIsDropDown] = useState(false)
     const [isShowProfile, setIsShowProfile] = useState(false)
@@ -59,6 +59,7 @@ export default function Navbar({children}) {
         if (localStorage.getItem('authToken')) {
             dispatch(logout.logoutRequest())
             localStorage.removeItem('authToken')
+            setOrdersContext(null)
             navigate("/")
         }
     }
@@ -132,7 +133,7 @@ export default function Navbar({children}) {
                         <Link to={"/reservation"}>
                             <Button name="Book A Table">
                                 Book A Table
-                                <span> ({orders.length})</span>
+                                <span> ({orders?.length})</span>
                             </Button>
                         </Link>
                     </div>

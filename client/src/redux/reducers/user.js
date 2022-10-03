@@ -78,11 +78,13 @@ export default function usersReducers(state = INIT_STATE.user, action) {
         ...state,
         isLoading: true,
       };
-    case getType(getAllUsers.getAllUsersSuccess):
+      case getType(getAllUsers.getAllUsersSuccess):
+      console.log(action.payload)
       return {
         ...state,
         isLoading: false,
         data: action.payload.data,
+        totalPageUser: action.payload.totalPage, 
       };
     case getType(getAllUsers.getAllUsersFailure):
       return {

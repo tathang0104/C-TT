@@ -36,7 +36,7 @@ export const getOneUser = createActions({
 });
 
 export const getAllUsers = createActions({
-  getAllUsersRequest: undefined,
+  getAllUsersRequest: (payload) => payload,
   getAllUsersSuccess: (payload) => payload,
   getAllUsersFailure: (err) => err,
 });
@@ -66,6 +66,12 @@ export const getProducts = createActions({
   getProductsFailure: (err) => err,
 });
 
+export const searchProduct = createActions({
+  searchProductRequest: (payload) => payload,
+  searchProductSuccess: (payload) => payload,
+  searchProductFailure: (err) => err,
+});
+
 export const createProduct = createActions({
   createProductRequest: (payload) => payload,
   createProductSuccess: (payload) => payload,
@@ -82,4 +88,24 @@ export const deleteProduct = createActions({
   deleteProductRequest: (payload) => payload,
   deleteProductSuccess: (payload) => payload,
   deleteProductFailure: (err) => err,
+});
+
+// OrderedMenu
+
+// export const sendMailOrder = createActions({
+//   sendMailOrderRequest: (payload) => payload,
+//   sendMailOrderSuccess: (payload) => payload,
+//   sendMailOrderFailure: (err) => err,
+// });
+
+export const getAllOrders = createActions({
+  getAllOrdersRequest: (payload) => payload,
+  getAllOrdersSuccess: (payload) => payload,
+  getAllOrdersFailure: (err) => err,
+});
+
+export const createOrder = createActions({
+  createOrderRequest: (payload) => payload,
+  createOrderSuccess: (payload) => payload,
+  createOrderFailure: (err) => err,
 });

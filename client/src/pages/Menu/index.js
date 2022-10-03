@@ -1,32 +1,76 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useInView from '../../hooks/useInView'
 import clsx from "clsx"
-import {data, menuBar} from "./data";
+import { menuBar} from "./data";
 import { MenuDetail } from './MenuDetail';
 import { Link } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import { useContext} from "react";
 import CartContext from '../../CartContext';
+import { productsState, totalPage } from '../../redux/selectors'; 
+import { useDispatch, useSelector } from 'react-redux';
+import * as actions from '../.././redux/actions';
 
 export default function Menu() {
     const title = useInView()
     
-  const {showModal, addToCard, handerShow, currentMeal, quantityValue, handerChangeQuantity, increase, decrease, handerOder} = useContext(CartContext)
-
-
-
-    const [showTabPane, setShowTapPane] = useState([true, false, false]);
-    const [notSearch, setNotSearch] = useState([false]);
-    const [inputSearch, setInputSearch] = useState("");
-    const [searchData, setSearchData] = useState([]);
-
+    const {showModal, addToCard, handerShow, currentMeal, quantityValue, handerChangeQuantity, increase, decrease, handerOder} = useContext(CartContext)
     
+    const dispatch = useDispatch();
+    const products = useSelector(productsState);
+    const total = useSelector(totalPage);
+    const [showTabPane, setShowTapPane] = useState([true, false, false, false]);
+    const [inputSearch, setInputSearch] = useState("");
+    const pagination = []
+    const [option, setOption] = useState({
+        page: 1,
+        size: 2,
+        category: '',
+        search: ''
+    });
+
     const handerCick = (id) => {
-        if (id === 0) setShowTapPane([true, false, false])
-        if (id === 1) setShowTapPane([false, true, false])
-        if (id === 2) setShowTapPane([false, false, true])
-        setNotSearch(true)
+        if (id === 0) {
+            setOption(prev => ({...prev, page: 1, category: '', search: ''}))
+            setShowTapPane([true, false, false, false])
+            setInputSearch("")
+        }
+        
+        if (id === 1) {
+            setOption(prev => ({...prev, page: 1, category: 'Breakfast'}))
+            setShowTapPane([false, true, false, false])
+        }
+
+        if (id === 2) {
+            setOption(prev => ({...prev, page: 1, category: 'Launch'}))
+            setShowTapPane([false, false, true, false])
+        }
+        if (id === 3) {
+            setOption(prev => ({...prev, page: 1, category: 'Dinner'}))
+            setShowTapPane([false, false, false, true])
+        }
     }
+
+    const changePage = (i) => {
+        setOption(prev => ({...prev, page: i}))
+      } 
+      for(let i = 0; i < total; i++) {
+        pagination.push(
+          <li key={i}>
+            <Link to={'#'} onClick={()=>{changePage(i+1)}} className={clsx({"active": i + 1 === option.page} )}>{i + 1}</Link>
+          </li>
+        )
+      }
+    
+      const prev = (page)=>{
+        if(option.page !== 1)
+          setOption(prev => ({...prev, page: page-1}))
+      }
+    
+      const next = (page)=>{
+        if(option.page !== total)
+          setOption(prev => ({...prev, page: page+1}))
+      }
     
     const menuBars = menuBar.map((item, index) => {
         return (
@@ -42,37 +86,25 @@ export default function Menu() {
         )
     }) 
 
-    let menu = [ [], [], [] ]
-    data.forEach((item) => {
-        if (item.category === "Breakfast") menu[0].push(item)
-        if (item.category === "Launch") menu[1].push(item)
-        if (item.category === "Diner") menu[2].push(item)
-    })
-    
-    const menus = menu.map((item, index) => {
+    const productShow = products.map((product)=>{
         return (
-            <div key={index} id={`tab-${index + 1}`} className={clsx("tab-pane animate__animated animate__fadeIn p-0 ", {"show active" : showTabPane[index]})}>
-                <div className="row g-4">
-                    {
-                        item.map((data) => {
-                            return (
-                              <MenuDetail
-                                key={data.id}
-                                id={data.id}
-                                photo={data.photo}
-                                name={data.name}
-                                price={data.price}
-                                description={data.description}
-                                quantity={data.quantity}
-                                addToCard={addToCard}
-                              />
-                            );
-                        })
-                    }
-                </div>
-            </div>
+            <MenuDetail
+                key={product._id}
+                _id={product._id}
+                photo_url={product.photo_url}
+                name={product.name}
+                price={product.price}
+                description={product.description}
+                quantity={product.quantity}
+                addToCard={addToCard}
+            />
         )
     })
+
+    useEffect(() => {
+        console.log(option)
+        dispatch(actions.searchProduct.searchProductRequest(option));
+    }, [dispatch, option, inputSearch]);
 
     // Search for items
     const handerChange = (e) => {
@@ -81,67 +113,52 @@ export default function Menu() {
 
     const handerSubmit = (e) => {
         e.preventDefault()
-        const menuData = data.filter(item => item.name.toLowerCase().includes(inputSearch) || item.price === parseFloat(inputSearch))
-        setSearchData(menuData)
-        setNotSearch(false)
+        setOption(prev => ({...prev, search: inputSearch }))
     }
-
-    const searchDatas = searchData.map((item) => {
-        return (
-            <MenuDetail 
-                key={item.id}
-                id={item.id}
-                photo={item.photo}
-                name={item.name}
-                price={item.price}
-                quantity={item.quantity}
-                description={item.description}
-                addToCard={addToCard}
-            />
-        )
-    })
 
   return (
     <div className="container-xxl py-5">
-    <div className="container">
-        <div ref={title.ref} className={clsx("text-center", {"animate__animated animate__fadeInUp": title.isInView})}>
-            <h5 className="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
-            <h1 className="mb-5">Most Popular Items</h1>
-        </div>
-        <div className='d-flex justify-content-center menu-search'>
-            <form className='d-flex justify-content-center align-items-center mb-4' onSubmit={(e) => handerSubmit(e)}>
-                <i className='fa fa-search text-primary' style={{fontSize: "16px"}}></i>
-                <input type="text" className="" placeholder="Search" value={inputSearch} onChange={(e) => handerChange(e)}/>
-            </form>
-        </div>
-        <div ref={title.ref} className={clsx("text-center tab-class", {"animate__animated animate__fadeInUp animate__delay-1s": title.isInView})}>
-            <ul className="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
-                { menuBars }
-            </ul>
-            <div className="tab-content">
-                { !notSearch ? ( searchData.length > 0 ? (
-                        <div id="tab-search" className={clsx("tab-pane animate__animated animate__fadeIn p-0 show active")}>
-                            <div className="row g-4">
-                                { searchDatas }
-                            </div>
+        <div className="container">
+            <div ref={title.ref} className={clsx("text-center", {"animate__animated animate__fadeInUp": title.isInView})}>
+                <h5 className="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
+                <h1 className="mb-5">Most Popular Items</h1>
+            </div>
+            <div className='d-flex justify-content-center menu-search'>
+                <form className='d-flex justify-content-center align-items-center mb-4' onSubmit={(e) => handerSubmit(e)}>
+                    <i className='fa fa-search text-primary' style={{fontSize: "16px"}}></i>
+                    <input type="text" className="" placeholder="Search" value={inputSearch} onChange={(e) => handerChange(e)}/>
+                </form>
+            </div>
+            <div ref={title.ref} className={clsx("text-center tab-class", {"animate__animated animate__fadeInUp animate__delay-1s": title.isInView})}>
+                <ul className="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
+                    { menuBars }
+                </ul>
+                <div className="tab-content mb-4">
+                    <div className='tab-pane animate__animated animate__fadeIn p-0 show active'>
+                        <div className='row g-4'>
+                            { productShow?.length ? productShow : (
+                                <div>No result</div>
+                            )}
                         </div>
-                ) : (
-                    <div>No result</div>
-                )
-                    ) :
-                    menus
+                    </div>
+                </div>
+                {
+                    total !== 0 && (
+                    <ul id="pagination">
+                        <li><Link to={'#'} onClick={()=>prev(option.page)}>«</Link></li>
+                        {pagination}
+                        <li><Link to={'#'} onClick={()=>next(option.page)}>»</Link></li>
+                    </ul> 
+                    )
                 }
             </div>
         </div>
-
-
-    </div>
     {
         showModal &&
         <Modal isShow={showModal} title="Your order" handlerShow={handerShow} >
             <div className="row g-4 m-4">
                 <h1 className="text-center text-primary m-0 p-0">Order</h1>
-                <MenuDetail id={currentMeal.id} photo={currentMeal.photo} name={currentMeal.name} price={currentMeal.price} description={currentMeal.description}/>
+                <MenuDetail id={currentMeal._id} photo_url={currentMeal.photo_url} name={currentMeal.name} price={currentMeal.price} description={currentMeal.description}/>
                 <div className="col-lg-6 d-flex flex-column">
                     <div className='d-flex justify-content-around align-items-center'>
                     <div>{currentMeal.quantity} {currentMeal.quantity > 1 ? "products" : "product"} are available</div>
@@ -165,6 +182,6 @@ export default function Menu() {
             </div>
         </Modal>
     }
-</div>
+    </div>
   )
 }

@@ -14,15 +14,20 @@ exports.getAllProduct = async (req, res, next) => {
     let page = parseInt(req.query.page) || 1
     let size = parseInt(req.query.size) || 5
     const category = (req.query.category) 
+    let totalPage 
     try {
       let product 
       if (category) {
         product = await Product.find({category}).skip((size * page) - size).limit(size);
+        const count = await Product.find({category}).count();
+        totalPage = Math.ceil(count / size) 
       }
       else {
         product = await Product.find().skip((size * page) - size).limit(size);
+        const count = await Product.find().count();
+        totalPage = Math.ceil(count / size) 
       }
-      res.status(200).json({ success: true, count:product.length, data: product , page , size});
+      res.status(200).json({ success: true, count:product.length, data: product , page , size, totalPage});
     } catch (err) {
       next(err);
     }
@@ -31,22 +36,65 @@ exports.getAllProduct = async (req, res, next) => {
 exports.searchProduct = async (req, res, next) => {
     let page = parseInt(req.query.page) || 1
     let size = parseInt(req.query.size) || 5
-    let search = req.query.search || ""
+    const category = (req.query.category) ?? ""
+    let search = req.query.search ?? ""
     let price = null
-
+    let product
+    
     if (!isNaN(search)) {
       price = { $lte: parseInt(search) }
     }
     try {
-      const  product = await Product.find({
+      let totalPage 
+      if (search === "" && category !== "") {
+          product = await Product.find({category}).skip((size * page) - size).limit(size);
+          const count = await Product.find({category}).count();
+          totalPage = Math.ceil(count / size) 
+        } else if (search !== "" && category !== "") { 
+        product = await Product.find({
           "$or": [
-            {name: { $regex: search }},
+            {name: { $regex:  search}},
+            {description: { $regex: search }},
+            {price},
+          ], 
+          '$and': [
+            {category}
+          ]
+        }).skip((size * page) - size).limit(size);
+        const count = await Product.find({
+          "$or": [
+            {name: { $regex:  search}},
+            {description: { $regex: search }},
+            {price},
+          ], 
+          '$and': [
+            {category}
+          ]
+        }).count();
+        totalPage = Math.ceil(count / size) 
+      } else if (search !== "" && category === "") {
+        product = await Product.find({
+          "$or": [
+            {name: { $regex:  search}},
             {description: { $regex: search }},
             {price},
           ]
         }).skip((size * page) - size).limit(size);
+        const count = await Product.find({
+          "$or": [
+            {name: { $regex:  search}},
+            {description: { $regex: search }},
+            {price},
+          ]
+        }).count();
+        totalPage = Math.ceil(count / size) 
+      } else  {
+        product = await Product.find().skip((size * page) - size).limit(size)
+        const count = await Product.find().count();
+        totalPage = Math.ceil(count / size) 
+      }
       
-      res.status(200).json({ success: true, count:product.length, data: product , page , size});
+      res.status(200).json({ success: true, count:product.length, data: product , page , size, totalPage});
     } catch (err) {
       next(err);
     }

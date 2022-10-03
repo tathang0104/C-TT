@@ -1,5 +1,5 @@
 import { INIT_STATE } from '../../constant';
-import { getProducts, getType, createProduct, updateProduct, getOneProduct, deleteProduct } from '../actions'
+import { getProducts, searchProduct, getType, createProduct, updateProduct, getOneProduct, deleteProduct } from '../actions'
 
 export default function productsReducers(state = INIT_STATE.product, action) {
   switch (action.type) {
@@ -30,8 +30,26 @@ export default function productsReducers(state = INIT_STATE.product, action) {
         ...state,
         isLoading: false,
         data: action.payload.data,
+        totalPage: action.payload.totalPage, 
       };
     case getType(getProducts.getProductsFailure):
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case getType(searchProduct.searchProductRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(searchProduct.searchProductSuccess):
+      return {
+        ...state,
+        isLoading: false,
+        data: action.payload.data,
+        totalPage: action.payload.totalPage, 
+      };
+    case getType(searchProduct.searchProductFailure):
       return {
         ...state,
         isLoading: false,

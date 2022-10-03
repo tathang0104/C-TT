@@ -10,6 +10,7 @@ import reducers from "./redux/reducers";
 // import ProductSaga from "./redux/sagas";
 import ProductSaga from "./redux/sagas/product";
 import UserSaga from "./redux/sagas/user";
+import OrderSaga from "./redux/sagas/order";
 import "./index.css";
 
 const sagaMiddleWare = createSagaMiddleware();
@@ -18,6 +19,7 @@ const store = createStore(reducers, applyMiddleware(sagaMiddleWare));
 
 sagaMiddleWare.run(UserSaga);
 sagaMiddleWare.run(ProductSaga);
+sagaMiddleWare.run(OrderSaga);
 
 function App() {
   return (

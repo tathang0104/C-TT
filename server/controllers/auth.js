@@ -74,16 +74,30 @@ exports.searchUser = async (req, res, next) => {
   let size = parseInt(req.query.size) || 5
   let search = req.query.search || ""
 
-  console.log(req.query)
   try {
-    const  user = await User.find({
+    let totalPage
+    let user
+    if (search !== "") {
+      user = await User.find({
         "$or": [
           {username: { $regex: search }},
           {email: { $regex: search }},
         ]
       }).skip((size * page) - size).limit(size);
-    
-    res.status(200).json({ success: true, count:user.length, data: user , page , size});
+      
+      const count = await User.find({
+        "$or": [
+          {username: { $regex: search }},
+          {email: { $regex: search }},
+        ]
+      }).count();
+      totalPage = count % size === 0 ? parseInt(count / size) : parseInt(count / size) + 1;
+    } else {
+      user = await User.find().skip((size * page) - size).limit(size);
+      const count = await User.find().count();
+      totalPage = count % size === 0 ? parseInt(count / size) : parseInt(count / size) + 1;
+    }
+    res.status(200).json({ success: true, count:user.length, data: user , page , size, totalPage});
   } catch (err) {
     next(err);
   }
@@ -93,17 +107,32 @@ exports.searchUser = async (req, res, next) => {
 exports.getAllUsers = async (req, res, next) => {
   let page = parseInt(req.query.page) || 1
   let size = parseInt(req.query.size) || 5
+  let search = req.query.search || ""
+
   try {
-    const user = await User.find().skip((size * page) - size).limit(size);
-
-    res.status(201).json({
-      success: true,
-      count: user.length,
-      data: user,
-      page,
-      size,
-    });
-
+    let totalPage
+    let user
+    if (search !== "") {
+      user = await User.find({
+        "$or": [
+          {username: { $regex: search }},
+          {email: { $regex: search }},
+        ]
+      }).skip((size * page) - size).limit(size);
+      
+      const count = await User.find({
+        "$or": [
+          {username: { $regex: search }},
+          {email: { $regex: search }},
+        ]
+      }).count();
+      totalPage = count % size === 0 ? parseInt(count / size) : parseInt(count / size) + 1;
+    } else {
+      user = await User.find().skip((size * page) - size).limit(size);
+      const count = await User.find().count();
+      totalPage = count % size === 0 ? parseInt(count / size) : parseInt(count / size) + 1;
+    }
+    res.status(200).json({ success: true, count:user.length, data: user , page , size, totalPage});
   } catch (err) {
     next(err);
   }

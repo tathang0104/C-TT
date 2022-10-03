@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 import useInView from '../hooks/useInView'
 import clsx from "clsx"
 import YouTube from 'react-youtube'
@@ -7,6 +8,8 @@ import Modal from '../components/Modal'
 import { OrderedMenu } from '../components/OrderedMenu'
 import { useContext} from "react";
 import CartContext from "../CartContext";
+import { useDispatch } from 'react-redux';
+import * as actions from '../redux/actions';
 
 export default function Reservation() {
     const title = useInView()
@@ -21,41 +24,48 @@ export default function Reservation() {
     const [specialRequest, setSpecialRequest] = useState("");
     const [peopleEat, setPeopleEat] = useState("People 1");
     const [orderSuccess, setOrderSuccess] = useState(false);
-      
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { orders } = useContext(CartContext);
 
-    const menuOrdered = orders.map(order => {
+    const menuOrdered = orders?.map(order => {
         return (
             <OrderedMenu 
-                key={order.menu_detail_id}
-                menu_detail_id={order.menu_detail_id}
-                photo={order.photo}
+                key={order.product_id}
+                product_id={order.product_id}
+                photo_url={order.photo_url}
                 name={order.name}
                 price={order.price}
                 quantity={order.quantity}
-                quantityOrdered={order.quantityOrdered}
+                quantity_order={order.quantity_order}
             />
         )
     })
 
     let sum = 0
 
-    orders.forEach(order => {
-        sum += order.price * order.quantityOrdered
+    orders?.forEach(order => {
+        sum += order.price * order.quantity_order
     })
-    // const totalPrice = orders.reduce((previousValue, currentValue) => previousValue.price * previousValue.quantityOrdered + currentValue.price * currentValue.quantityOrdered, sum )
-
-    // console.log(sum)
-    // const orderSuccessFul
 
     const handerSubmitFormOrderd = async (e, orders) => {
         e.preventDefault()
         
         if (orders.length === 0) {
             document.getElementsByClassName('err')[0].innerHTML = 'Please select a new order in menu'
+            navigate("/menu")
+        } else if (!localStorage.getItem('authToken')) {
+            navigate("/login")
         } else {
-            setOrderSuccess(true)
             console.log(orders)
+            setOrderSuccess(true)
+            const data = {
+                order_time: dateTime,
+                special_request: specialRequest,
+                detail_order: orders
+            }
+            console.log(data)
+            dispatch(actions.createOrder.createOrderRequest(data));
 
             const config = {
                 header: {

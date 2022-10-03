@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import * as actions from '../redux/actions';
-import { currentProduct$ } from "../redux/selectors";
+import { currentProduct } from "../redux/selectors";
 // import { useNavigate } from 'react-router-dom'
 
 const EditProduct = () => {
@@ -14,7 +14,7 @@ const EditProduct = () => {
   const [preview, setPreview] = useState();
 
   const dispatch = useDispatch();
-  const product = useSelector(currentProduct$);
+  const product = useSelector(currentProduct);
   const navigate = useNavigate();
   const [data, setData] = useState(null);
 

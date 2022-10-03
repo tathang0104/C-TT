@@ -18,6 +18,7 @@ export const CreateUser = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log(data)
     dispatch(createUser.createUserRequest(data));
     navigate('/dashboard/user');
   };

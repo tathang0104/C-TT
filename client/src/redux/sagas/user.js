@@ -41,7 +41,8 @@ function* getUserlogined(action) {
 
 function* fetchAllUsersSaga(action) {
   try {
-    const users = yield call(api.fetchAllUsers);
+    const payload = action?.payload ? action?.payload : {page: 1, size: 3, search: ''}
+    const users = yield call(api.fetchAllUsers, payload);
     yield put(actions.getAllUsers.getAllUsersSuccess(users.data));
   } catch (err) {
     console.error(err);
@@ -60,21 +61,20 @@ function* fetchOneUserSaga(action) {
   }
 }
 
-// function* createUserSaga(action) {
-//   try {
-//     const user = yield call(api.createProduct, action.payload);
-//     yield put(actions.createProduct.createProductSuccess(products.data));
-//   } catch (err) {
-//     console.error(err);
-//     yield put(actions.createProduct.createProductFailure(err));
-//   }
-// }
+function* createUserSaga(action) {
+  try {
+    const user = yield call(api.createUser, action.payload);
+    yield put(actions.createUser.createUserSuccess(user.data));
+  } catch (err) {
+    console.error(err);
+    yield put(actions.createUser.createUserFailure(err));
+  }
+}
 
 function* updateProfileUserSaga(action) {
   try {
     const updatedProfileUser = yield call(api.updateUser, action.payload);
     yield put(actions.updateProfileUser.updateProfileUserSuccess(updatedProfileUser.data));
-    yield fetchAllUsersSaga()
   } catch (err) {
     yield put(actions.updateProfileUser.updateProfileUserFailure(err));
   }
@@ -84,7 +84,7 @@ function* deleteUserSaga(action) {
   try {
     const deletedUser = yield call(api.deleteUser, action.payload );
     console.log(deletedUser.data)
-    yield fetchAllUsersSaga({page: 1, size: 5})
+    yield fetchAllUsersSaga()
   } catch (err) {
     console.error(err);
     yield put(actions.deleteUser.deleteUserFailure(err));
@@ -97,7 +97,7 @@ function* UserSaga() {
   yield takeLatest(actions.getType(actions.getProfile.getProfileRequest) , getUserlogined);
   yield takeLatest(actions.getType(actions.getAllUsers.getAllUsersRequest) , fetchAllUsersSaga);
   yield takeLatest(actions.getType(actions.getOneUser.getOneUserRequest) , fetchOneUserSaga);
-//   yield takeLatest(actions.getType(actions.createProduct.createProductRequest), createProductSaga);
+  yield takeLatest(actions.getType(actions.createUser.createUserRequest), createUserSaga);
   yield takeLatest(actions.getType(actions.updateProfileUser.updateProfileUserRequest), updateProfileUserSaga);
   yield takeLatest(actions.getType(actions.deleteUser.deleteUserRequest), deleteUserSaga);
 }

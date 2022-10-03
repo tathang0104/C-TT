@@ -58,7 +58,7 @@ router.route("/passwordreset/:resetToken").put(resetPassword);
 
 router.route("/").get(protect, getAllUsers);
 
-router.route("/search").get(protect, searchUser);
+router.route("/").get(protect, searchUser);
 
 router.route("/:_id").get(protect, getOneUser);
 

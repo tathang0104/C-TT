@@ -32,11 +32,11 @@ const UserSchema = new Schema(
     },
     avatar_url: {
       type: String,
-      default: ''
+      default: 'localhost:5000/uploads\\users\\default-avatar.jpg'
     },
     avatar_path: {
       type: String,
-      default: ''
+      default: 'uploads\\users\\default-avatar.jpg'
     },
     gender: {
       type: String,

@@ -2,20 +2,46 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../redux/actions';
-import { productsState$ } from '../redux/selectors';
+import { productsState, totalPage } from '../redux/selectors';
+import clsx from 'clsx';
 
 const Product = () => {
   const dispatch = useDispatch();
-  const products = useSelector(productsState$);
+  const products = useSelector(productsState);
+  const total = useSelector(totalPage);
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
+  const pagination = []
   const [option, setOption] = useState({
     page: 1,
-    size: 50,
+    size: 4,
     category: '',
+    search: '',
   });
+
+  const changePage = (i) => {
+    setOption(prev => ({...prev, page: i}))
+  } 
+  for(let i = 0; i < total; i++) {
+    pagination.push(
+      <li key={i}>
+        <Link to={'#'} onClick={()=>{changePage(i+1)}} className={clsx({"active": i + 1 === option.page} )}>{i + 1}</Link>
+      </li>
+    )
+  }
+
+  const prev = (page)=>{
+    if(option.page !== 1)
+      setOption(prev => ({...prev, page: page-1}))
+  }
+
+  const next = (page)=>{
+    if(option.page !== total)
+      setOption(prev => ({...prev, page: page+1}))
+  }
+
   useEffect(() => {
-    dispatch(actions.getProducts.getProductsRequest(option));
-    // dispatch(actions.getProducts.getProductsRequest());
+    dispatch(actions.searchProduct.searchProductRequest(option));
   }, [dispatch, option]);
 
   const handleEdit = (id) => {
@@ -23,14 +49,33 @@ const Product = () => {
   } 
   
   const handleDelete = (id) => {
-    console.log(id)
     dispatch(actions.deleteProduct.deleteProductRequest(id))
+    dispatch(actions.getProducts.getProductsRequest(option));
   } 
 
+  const handerChange = (e) => {
+    setSearchInput(e.target.value)
+  }
+
+  const handerSubmit = (e) => {
+    e.preventDefault()
+    setOption(prev => ({...prev, 
+      page: 1,
+      category: '',
+      search: searchInput 
+    }))
+  }
+  
   return (
     <>
       <div className='d-flex justify-content-between align-items-center'>
         <h1 className='text-primary'>Product list</h1>
+        <div className='menu-search'>
+          <form className='d-flex justify-content-center align-items-center' onSubmit={(e) => handerSubmit(e)}>
+            <i className='fa fa-search text-primary' style={{fontSize: "16px"}}></i>
+            <input type="text" className="" placeholder="Search" value={searchInput} onChange={(e) => handerChange(e)}/>
+          </form>
+        </div>
         <Link to={'create'} className="btn btn-primary">Add new product</Link>
       </div>
       <table className="table table-striped mt-3">
@@ -46,11 +91,11 @@ const Product = () => {
           </tr>
         </thead>
         <tbody>
-          {
-            products.map((product) => {
+          { total !== 0 ? (
+            products.map((product, index) => {
               return (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
+                  <td>{(option.page-1)*option.size+index+1}</td>
                   <td>{product.name}</td>
                   <td>{product.description}</td>
                   <td>{product.price}</td>
@@ -64,11 +109,21 @@ const Product = () => {
                   </td>
                 </tr>
               )
-            })
+            }))
+            : (<td style={{marginTop: "30px", textAlign: 'center'}} colSpan={7}>No result</td>)
           }
           
         </tbody>
       </table>
+      {
+        total !== 0 && (
+          <ul id="pagination">
+            <li><Link to={'#'} onClick={()=>prev(option.page)}>«</Link></li>
+            {pagination}
+            <li><Link to={'#'} onClick={()=>next(option.page)}>»</Link></li>
+          </ul> 
+        )
+      }
     </>
   )
 }

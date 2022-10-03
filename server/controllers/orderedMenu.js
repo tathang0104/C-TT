@@ -19,10 +19,9 @@ exports.searchOrder = async (req, res, next) => {
   let page = parseInt(req.query.page) || 1
   let size = parseInt(req.query.size) || 5
   let search = req.query.search || ""
-  // const user_id = 63228f8dfb22f650b2f731e4;
-  console.log(req.query)
-  console.log("hihihi")
+  
   try {
+    let totalPage
     const  order = await OrderedMenu
     .find()
     .populate({
@@ -38,8 +37,8 @@ exports.searchOrder = async (req, res, next) => {
         'name price photo_url category',
     })
     .skip((size * page) - size).limit(size)
-    
     const newOrder = order.filter(order => order.user_id !== null);
+    console.log(newOrder)
 
     
     

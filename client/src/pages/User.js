@@ -1,17 +1,29 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../redux/actions';
-import { usersState } from '../redux/selectors';
+import { usersState, totalPageUser } from '../redux/selectors';
+import clsx from 'clsx';
 
 const User = () => {
   const dispatch = useDispatch();
   const users = useSelector(usersState);
+  const total = useSelector(totalPageUser);
   const navigate = useNavigate();
+  const pagination = []
+  const [searchInput, setSearchInput] = useState("");
+  const [option, setOption] = useState({
+    page: 1,
+    size: 3,
+    search: '',
+  });
+  useEffect(() => {
+    console.log(total)
+  }, [total]);
 
   useEffect(() => {
-    dispatch(actions.getAllUsers.getAllUsersRequest());
-  }, [dispatch]);
+    dispatch(actions.getAllUsers.getAllUsersRequest(option));
+  }, [dispatch, option]);
 
   const handleEdit = (id) => {
     navigate(`update/${id}`)
@@ -21,10 +33,49 @@ const User = () => {
     dispatch(actions.deleteUser.deleteUserRequest(id))
   } 
 
+  const changePage = (i) => {
+    setOption(prev => ({...prev, page: i}))
+  } 
+  for(let i = 0; i < total; i++) {
+    pagination.push(
+      <li key={i}>
+        <Link to={'#'} onClick={()=>{changePage(i+1)}} className={clsx({"active": i + 1 === option.page} )}>{i + 1}</Link>
+      </li>
+    )
+  }
+
+  const prev = (page)=>{
+    if(option.page !== 1)
+      setOption(prev => ({...prev, page: page-1}))
+  }
+
+  const next = (page)=>{
+    if(option.page !== total)
+      setOption(prev => ({...prev, page: page+1}))
+  }
+
+  const handerChange = (e) => {
+    setSearchInput(e.target.value)
+  }
+
+  const handerSubmit = (e) => {
+    e.preventDefault()
+    setOption(prev => ({...prev, 
+      page: 1,
+      search: searchInput 
+    }))
+  }
+
   return (
     <>
       <div className='d-flex justify-content-between align-items-center'>
         <h1 className="text-primary">User list</h1>
+        <div className='menu-search'>
+          <form className='d-flex justify-content-center align-items-center' onSubmit={(e) => handerSubmit(e)}>
+            <i className='fa fa-search text-primary' style={{fontSize: "16px"}}></i>
+            <input type="text" className="" placeholder="Search" value={searchInput} onChange={(e) => handerChange(e)}/>
+          </form>
+        </div>
         <Link className='btn btn-primary' to={'create'}>Add new user</Link>
       </div>
       <table className="table table-striped mt-3">
@@ -44,7 +95,7 @@ const User = () => {
             users.map((user, index) => {
               return (
                 <tr key={user._id}>
-                  <th scope="row">{user._id.slice(-6)}</th>
+                  <td>{(option.page-1)*option.size+index+1}</td>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.gender}</td>
@@ -60,9 +111,17 @@ const User = () => {
               )
             })
           }
-          
         </tbody>
       </table>
+      {
+        total !== 0 && (
+          <ul id="pagination">
+            <li><Link to={'#'} onClick={()=>prev(option.page)}>«</Link></li>
+            {pagination}
+            <li><Link to={'#'} onClick={()=>next(option.page)}>»</Link></li>
+          </ul> 
+        )
+      }
     </>
   )
 }

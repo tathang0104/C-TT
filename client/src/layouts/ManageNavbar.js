@@ -5,7 +5,7 @@ import { logout } from '../redux/actions'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 import { ImProfile } from 'react-icons/im'
 import * as actions from '../redux/actions';
-import { currentUserLogined, currentUserLoginedToken } from "../redux/selectors";
+import { currentUserLogined, currentUserLoginedToken, usersState } from "../redux/selectors";
 
 
 
@@ -19,6 +19,7 @@ export default function ManageNavbar() {
     const pathName = location.pathname
     const profile = pathName.indexOf('/profile')
     const data = useSelector(currentUserLogined)
+    const dataUser = useSelector(usersState)
     const userLoginedToken = useSelector(currentUserLoginedToken);
   
 
@@ -40,7 +41,7 @@ export default function ManageNavbar() {
 
     useEffect(() => {
         dispatch(actions.getProfile.getProfileRequest(localStorage.getItem('authToken')));
-      }, [dispatch, userLoginedToken]);
+      }, [dispatch, userLoginedToken, dataUser]);
     
     useEffect(()=>{
         setUserLogined(data?.user)

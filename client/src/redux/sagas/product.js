@@ -4,11 +4,24 @@ import * as api from '../../api';
 
 function* fetchProductsSaga(action) {
   try {
-    const products = yield call(api.fetchProducts, action.payload);
+    const payload = action?.payload ? action?.payload : {page: 1, size: 3, category: '', search: ''}
+    const products = yield call(api.fetchProducts, payload);
+    console.log(products.data)
     yield put(actions.getProducts.getProductsSuccess(products.data));
   } catch (err) {
     console.error(err);
     yield put(actions.getProducts.getProductsFailure(err));
+  }
+}
+
+function* searchProductSaga(action) {
+  try {
+    const payload = action?.payload 
+    const products = yield call(api.searchProduct, payload);
+    yield put(actions.searchProduct.searchProductSuccess(products.data));
+  } catch (err) {
+    console.error(err);
+    yield put(actions.searchProduct.searchProductFailure(err));
   }
 }
 
@@ -44,9 +57,8 @@ function* updateProductSaga(action) {
 
 function* deleteProductSaga(action) {
   try {
-    const deletedProduct = yield call(api.deleteProduct, action.payload );
-    console.log(deletedProduct.data.data._id)
-    yield fetchProductsSaga({page: 1, size: 5})
+    yield call(api.deleteProduct, action.payload );
+    yield fetchProductsSaga()
   } catch (err) {
     console.error(err);
     yield put(actions.deleteProduct.deleteProductFailure(err));
@@ -55,6 +67,7 @@ function* deleteProductSaga(action) {
 
 function* ProductSaga() {
   yield takeLatest(actions.getType(actions.getProducts.getProductsRequest) , fetchProductsSaga);
+  yield takeLatest(actions.getType(actions.searchProduct.searchProductRequest) , searchProductSaga);
   yield takeLatest(actions.getType(actions.getOneProduct.getOneProductRequest) , fetchOneProductSaga);
   yield takeLatest(actions.getType(actions.createProduct.createProductRequest), createProductSaga);
   yield takeLatest(actions.getType(actions.updateProduct.updateProductRequest), updateProductSaga);

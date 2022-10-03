@@ -15,7 +15,7 @@ exports.bookingtable = async (req, res, next) => {
             `<div>  
                 <div>Name: ${item.name}</div>
                 <div>Price: ${item.price}</div>
-                <div>Quantity ordered: ${item.quantityOrdered}</div>
+                <div>Quantity ordered: ${item.quantity_order}</div>
             </div>`
         )
     })
@@ -25,7 +25,7 @@ exports.bookingtable = async (req, res, next) => {
     let sum = 0
 
     orders.forEach(item => {
-        sum += item.price * item.quantityOrdered
+        sum += item.price * item.quantity_order
     })
 
     // HTML Message

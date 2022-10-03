@@ -7,14 +7,15 @@ export const MenuDetail = (props) => {
 
   return (
     <>
-      <div className="col-lg-6 cursor-pointer" onClick={()=> addToCard(props.id)} >
-        <div className="d-flex align-items-center detail-menu position-relative" id={`detail-menu-${props.id}`}>
+      <div className="col-lg-6 cursor-pointer" onClick={()=> addToCard(props._id)} >
+        <div className="d-flex align-items-center detail-menu position-relative" id={`detail-menu-${props._id}`}>
           <div className="d-flex align-items-center justify-content-center position-absolute">
             <i className="fa fa-plus-circle fa-2x"></i>
           </div>
           <img
+            style={{width: "80px", height: "80px"}}
             className="flex-shrink-0 img-fluid rounded"
-            src={`/img/${props.photo}`}
+            src={`http://${props.photo_url}`}
             alt="img_menu"
           />
           <div className="w-100 d-flex flex-column text-start ps-4">
