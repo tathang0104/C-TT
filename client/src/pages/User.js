@@ -14,7 +14,7 @@ const User = () => {
   const [searchInput, setSearchInput] = useState("");
   const [option, setOption] = useState({
     page: 1,
-    size: 3,
+    size: 10,
     search: '',
   });
   useEffect(() => {
@@ -31,6 +31,10 @@ const User = () => {
   
   const handleDelete = (id) => {
     dispatch(actions.deleteUser.deleteUserRequest(id))
+    setOption({
+      page: 1,
+      search: '',
+    })
   } 
 
   const changePage = (i) => {

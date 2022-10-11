@@ -24,7 +24,7 @@ export default function Menu() {
     const pagination = []
     const [option, setOption] = useState({
         page: 1,
-        size: 2,
+        size: 10,
         category: '',
         search: ''
     });
@@ -102,7 +102,6 @@ export default function Menu() {
     })
 
     useEffect(() => {
-        console.log(option)
         dispatch(actions.searchProduct.searchProductRequest(option));
     }, [dispatch, option, inputSearch]);
 

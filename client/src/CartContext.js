@@ -2,11 +2,13 @@ import { createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { productsState } from "./redux/selectors"; 
 import * as actions from './redux/actions';
+import { useNavigate } from "react-router";
 
 const CartContext = createContext();
 
 export function CartProvider({children}) {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [showModal, setShowModal] = useState(false);
     const [orders, setOrders] = useState([]);
     const [currentMeal, setcurrentMeal] = useState(null);
@@ -14,7 +16,7 @@ export function CartProvider({children}) {
     const products = useSelector(productsState);
     const [option, setOption] = useState({
         page: 1,
-        size: 2,
+        size: 10,
         category: '',
         search: '',
     });
@@ -55,10 +57,12 @@ export function CartProvider({children}) {
     }
     
     const addToCard = (id) => { 
-        orders.length === 0 && setquantityValue(0)
+        orders?.length === 0 && setquantityValue(0)
         const detail = products.find(item => item._id === id)
         setcurrentMeal(detail)
-        if (orders.length > 0) {
+        if (!localStorage.getItem('authToken')) {
+            navigate("/login")
+        } else if (orders?.length > 0) {
             const ordered = orders.find(item => item.product_id === id) 
             ordered === undefined
             ? setquantityValue(0)
@@ -69,12 +73,12 @@ export function CartProvider({children}) {
 
     const handerOder = (currentMeal) => {
         
-        if (orders.length < 1 ) setquantityValue(0)
+        if (orders?.length < 1 ) setquantityValue(0)
         if (quantityValue > 0) {
             document.getElementsByClassName("error")[0].innerHTML = ``
             const orderList = { product_id: currentMeal._id, quantity_order : quantityValue, price: currentMeal.price, name: currentMeal.name, photo_url: currentMeal.photo_url}
 
-            if (orders.length > 0) {
+            if (orders?.length > 0) {
                 const index = orders.findIndex(item => item.product_id === currentMeal._id)
                 index !== -1 && orders.splice(index, 1)
             }

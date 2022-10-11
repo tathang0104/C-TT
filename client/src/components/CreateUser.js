@@ -11,6 +11,7 @@ export const CreateUser = () => {
     password: '',
     role: '',
   });
+  console.log(data);
   
   const navigate = useNavigate();
 
@@ -37,6 +38,7 @@ export const CreateUser = () => {
                     className="form-control"
                     id="username"
                     placeholder="User Name"
+                    value={data?.username}
                     onChange={(e) => setData({ ...data, username: e.target.value })}
                   />
                   <label htmlFor="username">User Name</label>
@@ -45,10 +47,11 @@ export const CreateUser = () => {
               <div className="col-md-6">
                 <div className="form-floating">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     id="email"
                     placeholder="Email"
+                    value={null}
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                   />
                   <label htmlFor="email">Email</label>
@@ -61,6 +64,7 @@ export const CreateUser = () => {
                     className="form-control"
                     id="password"
                     placeholder="Password"
+                    value={data?.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                   />
                   <label htmlFor="password">Password</label>
@@ -73,6 +77,7 @@ export const CreateUser = () => {
                     className="form-control"
                     id="role"
                     placeholder="Role"
+                    value={data?.role}
                     onChange={(e) => setData({ ...data, role: e.target.value })}
                   />
                   <label htmlFor="role">Role</label>

@@ -15,8 +15,7 @@ const {
 
 router.route("/").get(protect, getAllOrders);
 
-// router.route("/search").get(protect, searchOrder);
-router.route("/search").get(searchOrder);
+router.route("/search").get(protect, searchOrder);
 
 router.route("/viewoder/:_id").get(protect, getOneOrder);
 

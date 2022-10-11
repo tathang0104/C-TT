@@ -36,7 +36,7 @@ const UserSchema = new Schema(
     },
     avatar_path: {
       type: String,
-      default: 'uploads\\users\\default-avatar.jpg'
+      default: '\\users\\default-avatar.jpg'
     },
     gender: {
       type: String,

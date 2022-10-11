@@ -18,15 +18,15 @@ export default function Reservation() {
         setShowModal(prev => !prev)
     }
 
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
+    const [email, setEmail] = useState(`${localStorage.getItem('userLoginedEmail')}`);
+    const [name, setName] = useState(`${localStorage.getItem('userLoginedname')}`);
     const [dateTime, setDateTime] = useState("");
     const [specialRequest, setSpecialRequest] = useState("");
     const [peopleEat, setPeopleEat] = useState("People 1");
     const [orderSuccess, setOrderSuccess] = useState(false);
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { orders } = useContext(CartContext);
+    const { orders, setOrdersContext } = useContext(CartContext);
 
     const menuOrdered = orders?.map(order => {
         return (
@@ -50,14 +50,12 @@ export default function Reservation() {
 
     const handerSubmitFormOrderd = async (e, orders) => {
         e.preventDefault()
-        
-        if (orders.length === 0) {
+        if (!localStorage.getItem('authToken')) {
+            navigate("/login")
+        } else if (!orders || orders.length === 0) {
             document.getElementsByClassName('err')[0].innerHTML = 'Please select a new order in menu'
             navigate("/menu")
-        } else if (!localStorage.getItem('authToken')) {
-            navigate("/login")
         } else {
-            console.log(orders)
             setOrderSuccess(true)
             const data = {
                 order_time: dateTime,
@@ -81,6 +79,8 @@ export default function Reservation() {
                 );
                 
                 console.log(data)
+                setOrdersContext([])
+                navigate('/dashboard/selfOrder')
             } catch (error) {
                 console.log(error.response.data.error);
             }
@@ -109,25 +109,29 @@ export default function Reservation() {
                         }
                         <form className='mt-3' onSubmit={(e)=>handerSubmitFormOrderd(e, orders)}>
                             <div className="row g-3">
-                                <div className="col-md-6">
-                                    <div className="form-floating">
-                                        <input type="text" className="form-control" required id="name" placeholder="Your Name" 
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                        />
-                                        <label htmlFor="name">Your Name</label>
+                                { !localStorage.getItem('userLoginedname') && 
+                                    <div className="col-md-6">
+                                        <div className="form-floating">
+                                            <input type="text" className="form-control" required id="name" placeholder="Your Name" 
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                            />
+                                            <label htmlFor="name">Your Name</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="form-floating">
-                                        <input 
-                                            type="email" className="form-control" required id="email" placeholder="Your Email" 
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />
-                                        <label htmlFor="email">Your Email</label>
+                                }
+                                { !localStorage.getItem('userLoginedEmail') &&
+                                    <div className="col-md-6">
+                                        <div className="form-floating">
+                                            <input 
+                                                type="email" className="form-control" required id="email" placeholder="Your Email" 
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            />
+                                            <label htmlFor="email">Your Email</label>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                                 <div className="col-md-6">
                                     <div className="form-floating date" id="date3" data-target-input="nearest">
                                         <input type="text" className="form-control datetimepicker-input" required id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" 

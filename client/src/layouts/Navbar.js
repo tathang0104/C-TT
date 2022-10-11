@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 import { logout, getProfile } from '../redux/actions'
 import CartContext from '../CartContext'
-import { currentUserLogined, currentUserLoginedToken } from '../redux/selectors'
+import { currentUserLogined, currentUserLoginedToken, usersState } from '../redux/selectors'
 import { useDispatch, useSelector } from 'react-redux'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 import { ImProfile } from 'react-icons/im'
@@ -19,7 +19,7 @@ export default function Navbar({children}) {
     const [userLogined, setUserLogined] = useState(null)
     const data = useSelector(currentUserLogined)
     const userLoginedToken = useSelector(currentUserLoginedToken);
-
+    const dataUser = useSelector(usersState)
     const dispatch = useDispatch()
     const navigate = useNavigate();
     let location = useLocation()
@@ -58,7 +58,6 @@ export default function Navbar({children}) {
         e.preventDefault()
         if (localStorage.getItem('authToken')) {
             dispatch(logout.logoutRequest())
-            localStorage.removeItem('authToken')
             setOrdersContext(null)
             navigate("/")
         }
@@ -69,10 +68,9 @@ export default function Navbar({children}) {
     }, [data])
 
     useEffect(() => {
-        if (localStorage.getItem('authToken'))
+        if (localStorage.getItem('authToken') && userLoginedToken)
             dispatch(getProfile.getProfileRequest(localStorage.getItem('authToken')));
-      }, [dispatch, userLoginedToken]);
-    
+      }, [dispatch, userLoginedToken, dataUser]);   
 
     useEffect(()=> {
         const handleScroll =() => {
@@ -98,7 +96,7 @@ export default function Navbar({children}) {
 
     const show = isDropDown ? "show" : ""
     const profile = isShowProfile ? "show" : ""
-
+    
     return (
     <div className="container-xxl position-relative p-0">
             <nav id="navbar" className="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
@@ -124,9 +122,11 @@ export default function Navbar({children}) {
                         </div>
                         <Link to={"/contact"} className={!contact ? "nav-item nav-link active" : "nav-item nav-link"}>Contact</Link>
                         {
-                            !localStorage.getItem("authToken") 
-                            ? <Link to={"/login"} className={"nav-item nav-link"}>Login</Link>
-                            : <Link to={"/dashboard"} className={"nav-item nav-link"}>dashboard</Link>
+                            localStorage.getItem("authToken") 
+                                ? localStorage.getItem("userLoginedRole") === "ADMIN" 
+                                    ? <Link to={"/dashboard"} className={"nav-item nav-link"}>dashboard</Link>
+                                    : null
+                                : <Link to={"/login"} className={"nav-item nav-link"}>Login</Link>
                         }
                     </div>
                     <div className="px-2 py-4">
@@ -137,20 +137,22 @@ export default function Navbar({children}) {
                             </Button>
                         </Link>
                     </div>
-                    { userLogined && localStorage.getItem('authToken') &&
+                    { localStorage.getItem('authToken') &&
                         <div className={"nav-item dropdown" + profile} onMouseEnter={showProfile} onMouseLeave={hideProfile} >
                             <Link to={"#profile"} className="nav-link dropdown-toggle text-white" style={{padding: "20px 0px 20px 20px", fontWeight: "500"}} data-bs-toggle="dropdown">
                                 {
-                                    userLogined?.avatar_url ? (
-                                        <img src={`http://${userLogined?.avatar_url}`} alt="user_avt" className='avatar-img'/>
+                                    localStorage.getItem('userLoginedAvtUrl') ? (
+                                        <img src={`http://${localStorage.getItem('userLoginedAvtUrl')}`} alt="user_avt" className='avatar-img'/>
                                     ) : (
                                         <img src='/img/default-avatar.jpg' alt="user_avt" className='avatar-img'/>
                                     )
+                                    
                                 }
-                                { userLogined && userLogined?.username }
+                                { userLogined?.username ?? localStorage.getItem('userLoginedname')}
                             </Link>
                             <div className={"dropdown-menu m-0 " + profile} style={{}}>
                                 <Link to={"/dashboard/profile"} className={"dropdown-item"}><ImProfile style={{marginRight: "10px"}} />Profile</Link>
+                                <Link to={"/dashboard/selfOrder"} className={"dropdown-item"}><ImProfile style={{marginRight: "10px"}} />Order</Link>
                                 <Link to={"/logout"} onClick={(e)=>handleLogout(e)} className={"dropdown-item"} style={{borderTop: "1px solid #FEA116"}}><RiLogoutBoxRLine style={{marginRight: "10px"}}/>Logout</Link>
                             </div>  
                         </div>

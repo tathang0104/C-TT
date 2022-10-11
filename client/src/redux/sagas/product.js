@@ -4,7 +4,7 @@ import * as api from '../../api';
 
 function* fetchProductsSaga(action) {
   try {
-    const payload = action?.payload ? action?.payload : {page: 1, size: 3, category: '', search: ''}
+    const payload = action?.payload ? action?.payload : {page: 1, size: 10, category: '', search: ''}
     const products = yield call(api.fetchProducts, payload);
     console.log(products.data)
     yield put(actions.getProducts.getProductsSuccess(products.data));

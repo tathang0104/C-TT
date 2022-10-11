@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
 import * as actions from '../redux/actions';
 import { currentProduct } from "../redux/selectors";
-// import { useNavigate } from 'react-router-dom'
 
 const EditProduct = () => {
 
   const {id} = useParams()
-
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
-
   const dispatch = useDispatch();
   const product = useSelector(currentProduct);
   const navigate = useNavigate();
@@ -63,8 +59,6 @@ const EditProduct = () => {
     dispatch(actions.updateProduct.updateProductRequest(formData));
     navigate('/dashboard/product');
   };
-
-
 
   return (
     <>

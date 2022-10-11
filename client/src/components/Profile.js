@@ -49,6 +49,10 @@ export const Profile = () => {
       setdataUser({ ...dataUser, user_avatar: e.target.files[0]})
     };
   
+    const handerBack = () => { 
+      navigate(-1)
+    }
+
     const onSubmit = (e) => {
       e.preventDefault();
       const formData = new FormData();
@@ -61,7 +65,7 @@ export const Profile = () => {
       formData.append('address', dataUser.address);
       formData.append('user_avatar', dataUser.user_avatar);
       dispatch(actions.updateProfileUser.updateProfileUserRequest(formData));
-      navigate('/dashboard/user');
+      navigate(-1);
     };
     return (
         <>
@@ -181,9 +185,9 @@ export const Profile = () => {
                     </button>
                   </div>
                   <div className="col-6">
-                    <Link to={'/dashboard/user'} className="btn btn-danger w-50 py-3">
+                    <button onClick={handerBack} className="btn btn-danger w-50 py-3">
                       Cancel
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </form>

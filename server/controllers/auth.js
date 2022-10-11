@@ -162,7 +162,7 @@ exports.updateUser = async (req, res, next) => {
     if (!user) {
       return next(new ErrorResponse("You have no permissions to update", 401));
     }
-    if (user.avatar_url) {
+    if (user.avatar_path !== '\\users\\default-avatar.jpg') {
       fs.unlink(user.avatar_path, (err) => {
         if (err) {
           console.log("err", err)
@@ -175,6 +175,7 @@ exports.updateUser = async (req, res, next) => {
     user.avatar_path = req.file.path;
     user.gender = req.body.gender;
     user.dob = req.body.dob;
+    user.username = req.body.username;
     user.address = req.body.address;
 
     await user.save();
@@ -201,7 +202,7 @@ exports.deleteUser = async (req, res, next) => {
         return next(new ErrorResponse("You have no permissions to delete", 401));
       }
 
-      if (user.avatar_path) {
+      if (user.avatar_path !== '\\users\\default-avatar.jpg') {
         fs.unlink(user.avatar_path, (err) => {
           if (err) {
             console.log(err)

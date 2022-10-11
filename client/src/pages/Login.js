@@ -21,11 +21,11 @@ function Login() {
       dispatch(getProfile.getProfileRequest(userLoginedToken));
     }
   }, [dispatch, userLoginedToken]);
-  
-  useEffect(()=>{
-    
-  })
+
   useEffect(() => {
+    if (userLogined) {
+      localStorage.setItem("userLoginedRole", userLogined?.user?.role)
+    }
     userLogined?.user.role === "ADMIN" && navigate("/dashboard")
     userLogined?.user.role === "USER" && navigate("/")
   },[navigate, userLogined])

@@ -41,7 +41,7 @@ const Register = () => {
 
       localStorage.setItem("authToken", data.token);
 
-      navigate("/dashboard")
+      navigate("/")
     } catch (error) {
       setError(error.response.data.error);
       setTimeout(() => {

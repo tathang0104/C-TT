@@ -11,7 +11,7 @@ import reducers from "./redux/reducers";
 import ProductSaga from "./redux/sagas/product";
 import UserSaga from "./redux/sagas/user";
 import OrderSaga from "./redux/sagas/order";
-import "./index.css";
+import DashboardSaga from "./redux/sagas/dashboard";
 
 const sagaMiddleWare = createSagaMiddleware();
 
@@ -20,20 +20,21 @@ const store = createStore(reducers, applyMiddleware(sagaMiddleWare));
 sagaMiddleWare.run(UserSaga);
 sagaMiddleWare.run(ProductSaga);
 sagaMiddleWare.run(OrderSaga);
+sagaMiddleWare.run(DashboardSaga);
 
 function App() {
   return (
-    <Provider store={store}>
-      <CartProvider>
-        <GlobleStyle>
-          <Router>
+    <Router>
+      <Provider store={store}>
+        <CartProvider>
+          <GlobleStyle>
             <Fragment>
               <AppRouter></AppRouter>
             </Fragment>
-          </Router>
-        </GlobleStyle>
-      </CartProvider>
-    </Provider>
+          </GlobleStyle>
+        </CartProvider>
+      </Provider>
+    </Router>
   );
 }
 

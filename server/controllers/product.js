@@ -47,7 +47,7 @@ exports.searchProduct = async (req, res, next) => {
     try {
       let totalPage 
       if (search === "" && category !== "") {
-          product = await Product.find({category}).skip((size * page) - size).limit(size);
+          product = await Product.find({category}).sort("-updatedAt").skip((size * page) - size).limit(size);
           const count = await Product.find({category}).count();
           totalPage = Math.ceil(count / size) 
         } else if (search !== "" && category !== "") { 
@@ -60,7 +60,7 @@ exports.searchProduct = async (req, res, next) => {
           '$and': [
             {category}
           ]
-        }).skip((size * page) - size).limit(size);
+        }).sort("-updatedAt").skip((size * page) - size).limit(size);
         const count = await Product.find({
           "$or": [
             {name: { $regex:  search}},
@@ -79,7 +79,7 @@ exports.searchProduct = async (req, res, next) => {
             {description: { $regex: search }},
             {price},
           ]
-        }).skip((size * page) - size).limit(size);
+        }).sort("-updatedAt").skip((size * page) - size).limit(size);
         const count = await Product.find({
           "$or": [
             {name: { $regex:  search}},
@@ -89,7 +89,7 @@ exports.searchProduct = async (req, res, next) => {
         }).count();
         totalPage = Math.ceil(count / size) 
       } else  {
-        product = await Product.find().skip((size * page) - size).limit(size)
+        product = await Product.find().sort("-updatedAt").skip((size * page) - size).limit(size)
         const count = await Product.find().count();
         totalPage = Math.ceil(count / size) 
       }

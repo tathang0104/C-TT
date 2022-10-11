@@ -5,6 +5,12 @@ export const getType = (reduxAction) => {
 };
 
 // User actions
+export const register = createActions({
+  registerRequest: (payload) => payload,
+  registerSuccess: (payload) => payload,
+  registerFailure: (err) => err,
+});
+
 export const login = createActions({
   loginRequest: (payload) => payload,
   loginSuccess: (payload) => payload,
@@ -104,8 +110,44 @@ export const getAllOrders = createActions({
   getAllOrdersFailure: (err) => err,
 });
 
+export const getSelfOrders = createActions({
+  getSelfOrdersRequest: (payload) => payload,
+  getSelfOrdersSuccess: (payload) => payload,
+  getSelfOrdersFailure: (err) => err,
+});
+
+export const searchOrder = createActions({
+  searchOrderRequest: (payload) => payload,
+  searchOrderSuccess: (payload) => payload,
+  searchOrderFailure: (err) => err,
+});
+
 export const createOrder = createActions({
   createOrderRequest: (payload) => payload,
   createOrderSuccess: (payload) => payload,
   createOrderFailure: (err) => err,
+});
+
+export const getOneOrder = createActions({
+  getOneOrderRequest: undefined,
+  getOneOrderSuccess: (payload) => payload,
+  getOneOrderFailure: (err) => err,
+});
+
+export const updateOrder = createActions({
+  updateOrderRequest: (payload) => payload,
+  updateOrderSuccess: (payload) => payload,
+  updateOrderFailure: (err) => err,
+});
+
+export const deleteOrder = createActions({
+  deleteOrderRequest: (payload) => payload,
+  deleteOrderSuccess: (payload) => payload,
+  deleteOrderFailure: (err) => err,
+});
+
+export const getDashboard = createActions({
+  getDashboardRequest: undefined,
+  getDashboardSuccess: (payload) => payload,
+  getDashboardFailure: (err) => err,
 });

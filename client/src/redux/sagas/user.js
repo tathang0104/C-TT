@@ -17,9 +17,25 @@ function* loginSaga(action) {
   }
 }
 
+function* registerSaga(action) {
+  try {
+    const user = yield call(api.register, action.payload);
+    console.log(user.data)
+    localStorage.setItem("authToken", user.data.token);
+    yield put(actions.register.registerSuccess(user.data));
+  } catch (err) {
+    console.error(err);
+    yield put(actions.register.registerFailure(err));
+  }
+}
+
 function* logoutSaga(action) {
   try {
     localStorage.removeItem("authToken");
+    localStorage.removeItem('userLoginedRole');
+    localStorage.removeItem("userLoginedname");
+    localStorage.removeItem("userLoginedAvtUrl");
+    localStorage.removeItem("userLoginedEmail");
     yield put(actions.logout.logoutSuccess());
   } catch (err) {
     console.error(err);
@@ -30,7 +46,10 @@ function* logoutSaga(action) {
 function* getUserlogined(action) {
   try {
     const userProfile = yield call(api.getProfile, action.payload);
-    console.log(userProfile.data)
+    localStorage.setItem("userLoginedRole", userProfile.data.user.role);
+    localStorage.setItem("userLoginedname", userProfile.data.user.username);
+    localStorage.setItem("userLoginedAvtUrl", userProfile.data.user.avatar_url);
+    localStorage.setItem("userLoginedEmail", userProfile.data.user.email);
     yield put(actions.getProfile.getProfileSuccess(userProfile.data));
   } catch (err) {
     console.error(err);
@@ -41,7 +60,7 @@ function* getUserlogined(action) {
 
 function* fetchAllUsersSaga(action) {
   try {
-    const payload = action?.payload ? action?.payload : {page: 1, size: 3, search: ''}
+    const payload = action?.payload ? action?.payload : {page: 1, size: 10, search: ''}
     const users = yield call(api.fetchAllUsers, payload);
     yield put(actions.getAllUsers.getAllUsersSuccess(users.data));
   } catch (err) {
@@ -92,6 +111,7 @@ function* deleteUserSaga(action) {
 }
 
 function* UserSaga() {
+  yield takeLatest(actions.getType(actions.register.registerRequest) , registerSaga);
   yield takeLatest(actions.getType(actions.login.loginRequest) , loginSaga);
   yield takeLatest(actions.getType(actions.logout.logoutRequest) , logoutSaga);
   yield takeLatest(actions.getType(actions.getProfile.getProfileRequest) , getUserlogined);

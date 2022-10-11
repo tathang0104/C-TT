@@ -34,7 +34,6 @@ export default function ManageNavbar() {
         e.preventDefault()
         if (localStorage.getItem('authToken')) {
             dispatch(logout.logoutRequest())
-            localStorage.removeItem('authToken')
             navigate("/")
         }
     }
@@ -48,10 +47,10 @@ export default function ManageNavbar() {
     }, [data])
 
     useEffect(()=>{
-        if (!localStorage.getItem('authToken')) {
+        if (!localStorage.getItem('authToken') && userLogined) {
             navigate("/")
         }
-    }, [navigate])
+    }, [navigate, userLogined])
 
     useEffect(()=> {
         const handleScroll =() => {
@@ -100,6 +99,7 @@ export default function ManageNavbar() {
                                 </Link>
                                 <div className={"dropdown-menu m-0 " + show}>
                                     <Link to={"profile"} className={profile ? "dropdown-item": "dropdown-item active"}><ImProfile style={{marginRight: "10px"}} />Profile</Link>
+                                    <Link to={"selfOrder"} className={profile ? "dropdown-item": "dropdown-item active"}><ImProfile style={{marginRight: "10px"}} />Order</Link>
                                     <Link to={"/logout"} onClick={(e)=>handleLogout(e)} className={"dropdown-item"} style={{borderTop: "1px solid #FEA116"}}><RiLogoutBoxRLine style={{marginRight: "10px"}}/>Logout</Link>
                                 </div>  
                             </div>

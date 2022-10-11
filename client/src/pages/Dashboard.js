@@ -1,46 +1,65 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { getDashboard } from "../redux/actions";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { currentUserLogined } from "../redux/selectors";
+import { useSelector, useDispatch } from 'react-redux';
+import { currentUserLogined, dashboardState } from "../redux/selectors";
+import BarChart from "../components/BarChart";
 
 const Dasboard = () => {
-  const [error, setError] = useState("");
-  const [privateData, setPrivateData] = useState("");
-  const [dataUser, setDataUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const dispatch = useDispatch()
   const userLogined = useSelector(currentUserLogined);
+  const dashboardData = useSelector(dashboardState);
   const navigate = useNavigate()
-  useEffect(() => {
-    setDataUser(userLogined?.user)
-  },[userLogined])
+
+  useEffect(() =>{
+    if (!localStorage.getItem('authToken')) {
+      navigate('/')
+    }
+  },[navigate])
 
   useEffect(() => {
-    const fetchPrivateDate = async () => {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    dispatch(getDashboard.getDashboardRequest())
+  }, [dispatch]);
+  console.log(dashboardData?.userPerMonth)
+
+
+  useEffect(() => {
+    setUserData({
+      labels: dashboardData?.userPerMonth?.map((data) => data.lable),
+      datasets: [
+        {
+          label: "Users Gained",
+          data: dashboardData?.userPerMonth?.map((data) => data.Count),
+          backgroundColor: "#FEA116",
+          borderColor: "#0F172B",
+          borderWidth: 1,
         },
-      };
-
-      try {
-        const { data } = await axios.get("/api/private", config);
-        setPrivateData(data.data);
-      } catch (error) {
-        localStorage.removeItem("authToken");
-        setError("You are not authorized please login");
-        navigate("/")
-      }
-    };
-
-    fetchPrivateDate();
-  }, [navigate]);
-  return error ? (
-    <span className="error-message">{error}</span>
-  ) : (
+        {
+          label: "Orders Gained",
+          data: dashboardData?.orderPerMonth?.map((data) => data.Count),
+          backgroundColor: "#C7372F",
+          borderColor: "#0F172B",
+          borderWidth: 1,
+        },
+        {
+          label: "Products Gained",
+          data: dashboardData?.productPerMonth?.map((data) => data.Count),
+          backgroundColor: "#00A465",
+          borderColor: "#0F172B",
+          borderWidth: 1,
+        },
+      ],
+    })
+  }, [dashboardData]);
+  return (
     <>
-      { dataUser && <h1 className="text-primary">Hello {userLogined?.user.username} your email {userLogined?.user.email}</h1>}
-      <div>{privateData}</div>
+      {<h1 className="">Hello {userLogined?.user.username}, {userLogined?.user.email}</h1>}
+      <div className="row">
+        <div className="col-md-12">
+          {userData && <BarChart chartData={userData} />}
+        </div>
+      </div>
     </>
   )
 }

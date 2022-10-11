@@ -24,7 +24,10 @@ return (
         <div style={{height: "auto", backgroundColor: "white"}}>
 
         <div className="container-xxl bg-white p-0">
-          <RightSideBar />
+          {
+            localStorage.getItem("userLoginedRole") === "ADMIN" ? <RightSideBar /> : null
+          }
+          
           <div className="bg-white p-4" style={{borderLeft: '2px solid black', marginLeft: '300px', minHeight: '500px'}}>
             <Outlet />
           </div>

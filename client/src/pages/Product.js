@@ -14,7 +14,7 @@ const Product = () => {
   const pagination = []
   const [option, setOption] = useState({
     page: 1,
-    size: 4,
+    size: 10,
     category: '',
     search: '',
   });
@@ -50,7 +50,11 @@ const Product = () => {
   
   const handleDelete = (id) => {
     dispatch(actions.deleteProduct.deleteProductRequest(id))
-    dispatch(actions.getProducts.getProductsRequest(option));
+    setOption({
+      page: 1,
+      category: '',
+      search: '',
+    })
   } 
 
   const handerChange = (e) => {

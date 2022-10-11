@@ -64,7 +64,7 @@ router.route("/:_id").get(protect, getOneUser);
 
 router.route("/create").post(protect, createUser);
 
-router.route("/updateprofile/:_id").put(protect, upload.single('user_avatar'), updateUser);
+router.route("/updateprofile/:_id").put(upload.single('user_avatar'), updateUser);
 
 router.route("/delete/:_id").delete(protect, deleteUser);
 

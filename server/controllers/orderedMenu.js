@@ -22,12 +22,11 @@ exports.searchOrder = async (req, res, next) => {
   
   try {
     let totalPage
-    const  order = await OrderedMenu
+    const order = await OrderedMenu
     .find()
     .populate({
       path: 'user_id',
       match: { username: { $regex: search, $options: "i" }},
-      // // username: 'thangahihi',
       select:
         'username',
     })
@@ -36,13 +35,12 @@ exports.searchOrder = async (req, res, next) => {
       select:
         'name price photo_url category',
     })
-    .skip((size * page) - size).limit(size)
-    const newOrder = order.filter(order => order.user_id !== null);
-    console.log(newOrder)
-
+    .sort("-updatedAt")
+    const count = order.filter(order => order.user_id !== null).length
+    totalPage = Math.ceil(count / size)
+    const newOrder = order.filter(order => order.user_id !== null).slice((page-1)*size, page*size)
     
-    
-    res.status(200).json({ success: true, count:newOrder.length, data: newOrder , page , size});
+    res.status(200).json({ success: true, count:newOrder.length, data: newOrder , page , size, totalPage});
   } catch (err) {
     next(err);
   }
@@ -52,8 +50,9 @@ exports.searchOrder = async (req, res, next) => {
 exports.getSelfOrder = async (req, res, next) => {
   let page = parseInt(req.query.page) || 1
   let size = parseInt(req.query.size) || 5
+  // let search = req.query.search || ""
   try {
-    // const order = await OrderedMenu.find();
+    let totalPage
     const order = await OrderedMenu.find({user_id: req.user._id})
     .populate({
       path: 'user_id',
@@ -65,10 +64,12 @@ exports.getSelfOrder = async (req, res, next) => {
       select:
         'name price photo_url category',
     })
+    .sort('-updatedAt')
     .skip((size * page) - size)
     .limit(size)
-
-    res.status(200).json({ success: true, count: order.length, data: order ,page ,size});
+    const count = await OrderedMenu.find({user_id: req.user._id}).count()
+    totalPage = Math.ceil(count / size)
+    res.status(200).json({ success: true, count: order.length, data: order, page, totalPage});
   } catch (err) {
     next(err);
   }
@@ -115,6 +116,8 @@ exports.createOrder = async (req, res, next) => {
 };
 
 exports.updateOrder = async (req, res, next) => {
+  console.log(req.body)
+  console.log(req.params)
 
     try {
         const order = await OrderedMenu.findOne({_id: req.params._id});

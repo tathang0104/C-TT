@@ -50,6 +50,10 @@ const EditUser = () => {
     setData({ ...data, user_avatar: e.target.files[0]})
   };
 
+  const handerBack = () => {
+    navigate(-1)
+  }
+
   const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -178,9 +182,9 @@ const EditUser = () => {
                 </button>
               </div>
               <div className="col-6">
-                <Link to={'/dashboard/user'} className="btn btn-danger w-50 py-3">
+                <button onClick={handerBack} className="btn btn-danger w-50 py-3">
                   Cancel
-                </Link>
+                </button>
               </div>
             </div>
           </form>

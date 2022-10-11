@@ -17,8 +17,13 @@ export const INIT_STATE = {
     isLoading: false,
     data: [],
     currentData: null,
-    selfData: null,
+    selfData: [],
+    totalPageOrder: null,
   },
+  dashboard: {
+    isLoading: false,
+    data: [],
+  }
 };
 
   

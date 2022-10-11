@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import Notfound from "./components/Notfound";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -26,6 +26,9 @@ import ViewOrder from "./components/ViewOrder";
 import CreateProduct from "./components/CreateProduct";
 import { Profile } from "./components/Profile";
 import { CreateUser } from "./components/CreateUser";
+import AdminRoute from "./components/routing/AdminRoute";
+import EditOrder from "./components/EditOrder";
+import { SelfOrder } from "./components/SelfOrder";
 
 export const AppRouter = () => {
   return (
@@ -55,25 +58,48 @@ export const AppRouter = () => {
           <ManageLayout />
         </PrivateRoute>
       }>
-        <Route exact index element={<Dasboard />}/>
+        <Route exact index element={
+          <AdminRoute>
+            <Dasboard />
+          </AdminRoute>
+        }/>
         <Route path="profile" element={<Profile />} />
+        <Route path="selfOrder" element={<SelfOrder />} />
         
-        <Route path='user'>
-          {
-            
-          }
-          <Route exact index element={<User />}/>
-          <Route path='create' element={<CreateUser />} />
+        <Route path='user' element={
+          <PrivateRoute>
+            <Outlet />
+          </PrivateRoute>
+        }>
+          <Route exact index element= {
+            <AdminRoute>
+              <User />
+            </AdminRoute>
+          }/>
+          <Route path='create' element={
+            <AdminRoute>
+              <CreateUser />
+            </AdminRoute>
+          }/>
           <Route path='update/:id' element={<EditUser />} />
         </Route>
-        <Route path='product'>
+        <Route path='product' element={
+          <AdminRoute> 
+            <Outlet />
+          </AdminRoute>
+        }>
           <Route exact index element={<Product />}/>
           <Route path='create' element={<CreateProduct />} />
           <Route path='update/:id' element={<EditProduct />} />
         </Route>
-        <Route path='order'>
+        <Route path='order' element={
+          <AdminRoute> 
+            <Outlet />
+          </AdminRoute>
+        }>
           <Route exact index element={<Order />}/>
           <Route path='view/:id' element={<ViewOrder />} />
+          <Route path='update/:id' element={<EditOrder />} />
         </Route>
       </Route>
       

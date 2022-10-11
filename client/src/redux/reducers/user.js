@@ -1,5 +1,5 @@
 import { INIT_STATE } from '../../constant';
-import { getType, login, logout, getOneUser, getAllUsers, updateProfileUser, deleteUser, getProfile, createUser } from '../actions'
+import { getType, login, logout, getOneUser, getAllUsers, updateProfileUser, deleteUser, getProfile, createUser, register } from '../actions'
 
 export default function usersReducers(state = INIT_STATE.user, action) {
   switch (action.type) {
@@ -19,6 +19,23 @@ export default function usersReducers(state = INIT_STATE.user, action) {
         ...state,
         isLoading: false,
         currentUserLogined: null,
+      };
+    case getType(register.registerRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(register.registerSuccess):
+      return {
+        ...state,
+        isLoading: true,
+        currentUserLoginedToken: action.payload.token,
+      };
+    case getType(register.registerFailure):
+      return {
+        ...state,
+        isLoading: false,
+        currentUserLoginedToken: null,
       };
     case getType(login.loginRequest):
       return {

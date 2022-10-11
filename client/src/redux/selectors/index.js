@@ -15,3 +15,8 @@ export const totalPage = (state) => state.products.totalPage;
 export const ordersState = (state) => state.orders.data;
 export const currentOrder = (state) => state.orders.currentData;
 export const selfOrder = (state) => state.orders.selfData;
+export const totalPageOrder = (state) => state.orders.totalPageOrder;
+export const totalPageSelfOrder = (state) => state.orders.totalPageSelfOrder;
+
+//dashboard
+export const dashboardState = (state) => state.dashboard.data;
