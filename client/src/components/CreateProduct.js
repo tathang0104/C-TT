@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
-import { createProduct } from "../redux/actions";
 import { useNavigate } from 'react-router-dom'
+import { createProduct } from '../api'
 
 const CreateProduct = () => {
 
@@ -18,8 +17,6 @@ const CreateProduct = () => {
   });
   
   const navigate = useNavigate();
-
-  const dispatch = useDispatch();
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -54,8 +51,12 @@ const CreateProduct = () => {
     formData.append('price', data.price);
     formData.append('category', data.category);
     formData.append('productPhoto', data.productPhoto);
-    dispatch(createProduct.createProductRequest(formData));
-    navigate('/dashboard/product');
+
+    createProduct(formData).then(data => {
+      navigate('/dashboard/product');
+    }).catch(err => {
+      console.log(err)
+    })
   };
 
   return (

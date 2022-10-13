@@ -49,10 +49,7 @@ const Order = () => {
   
   const handleDelete = (id) => {
     dispatch(actions.deleteOrder.deleteOrderRequest(id))
-    setOption({
-      page: 1,
-      search: '',
-    })
+    setOption(prev => ({...prev, page: 1}))
   } 
 
   const handerChange = (e) => {

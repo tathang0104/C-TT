@@ -50,11 +50,7 @@ const Product = () => {
   
   const handleDelete = (id) => {
     dispatch(actions.deleteProduct.deleteProductRequest(id))
-    setOption({
-      page: 1,
-      category: '',
-      search: '',
-    })
+    setOption(prev => ({...prev, page: 1}))
   } 
 
   const handerChange = (e) => {

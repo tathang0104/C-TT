@@ -125,20 +125,24 @@ exports.updateProduct = async (req, res, next) => {
         if (!product) {
           return next(new ErrorResponse("You have no permissions to update", 401));
         }
-        if (product.photo_path) {
-          fs.unlink(product.photo_path, (err) => {
-            if (err) {
-              console.log(err)
-              return
-            }
-          })
+        
+        if (req?.file) {
+          if (product.photo_path) {
+            fs.unlink(product.photo_path, (err) => {
+              if (err) {
+                console.log(err)
+                return
+              }
+            })
+          }
+          
+          product.photo_url = process.env.LOCALHOST + req?.file?.path;
+          product.photo_path = req?.file?.path;
         }
 
         product.name = req.body.name;
         product.description = req.body.description;
         product.price = req.body.price;
-        product.photo_url = process.env.LOCALHOST + req.file.path;
-        product.photo_path = req.file.path;
         product.category = req.body.category;
     
         await product.save();

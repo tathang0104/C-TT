@@ -49,6 +49,8 @@ function* createProductSaga(action) {
 function* updateProductSaga(action) {
   try {
     const updatedProduct = yield call(api.updateProduct, action.payload);
+    console.log(updatedProduct.data);  
+    console.log(1);
     yield put(actions.updateProduct.updateProductSuccess(updatedProduct.data));
   } catch (err) {
     yield put(actions.updateProduct.updateProductFailure(err));

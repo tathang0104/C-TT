@@ -40,7 +40,7 @@ export default function ManageNavbar() {
 
     useEffect(() => {
         dispatch(actions.getProfile.getProfileRequest(localStorage.getItem('authToken')));
-      }, [dispatch, userLoginedToken, dataUser]);
+    }, [dispatch, userLoginedToken, dataUser]);
     
     useEffect(()=>{
         setUserLogined(data?.user)

@@ -68,9 +68,10 @@ export default function Navbar({children}) {
     }, [data])
 
     useEffect(() => {
-        if (localStorage.getItem('authToken') && userLoginedToken)
+        console.log(userLoginedToken)
+        if (localStorage.getItem('authToken') || userLoginedToken)
             dispatch(getProfile.getProfileRequest(localStorage.getItem('authToken')));
-      }, [dispatch, userLoginedToken, dataUser]);   
+    }, [dispatch, userLoginedToken, dataUser]);   
 
     useEffect(()=> {
         const handleScroll =() => {
@@ -141,12 +142,11 @@ export default function Navbar({children}) {
                         <div className={"nav-item dropdown" + profile} onMouseEnter={showProfile} onMouseLeave={hideProfile} >
                             <Link to={"#profile"} className="nav-link dropdown-toggle text-white" style={{padding: "20px 0px 20px 20px", fontWeight: "500"}} data-bs-toggle="dropdown">
                                 {
-                                    localStorage.getItem('userLoginedAvtUrl') ? (
-                                        <img src={`http://${localStorage.getItem('userLoginedAvtUrl')}`} alt="user_avt" className='avatar-img'/>
+                                    userLogined?.avatar_url ? (
+                                        <img src={`http://${userLogined?.avatar_url}`} alt="user_avt" className='avatar-img'/>
                                     ) : (
                                         <img src='/img/default-avatar.jpg' alt="user_avt" className='avatar-img'/>
                                     )
-                                    
                                 }
                                 { userLogined?.username ?? localStorage.getItem('userLoginedname')}
                             </Link>

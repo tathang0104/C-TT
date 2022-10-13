@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+import { useDispatch } from 'react-redux';
+import { register } from '../redux/actions';
 import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -9,16 +10,10 @@ const Register = () => {
   const [confirmpassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const registerHandler = async (e) => {
     e.preventDefault();
-
-    const config = {
-      header: {
-        "Content-Type": "application/json",
-      },
-    };
-
     if (password !== confirmpassword) {
       setPassword("");
       setConfirmPassword("");
@@ -29,24 +24,15 @@ const Register = () => {
     }
 
     try {
-      const { data } = await axios.post(
-        "/api/auth/register",
-        {
-          username,
-          email,
-          password,
-        },
-        config
-      );
-
-      localStorage.setItem("authToken", data.token);
+      dispatch(register.registerRequest({
+        username,
+        email,
+        password,
+      }));
 
       navigate("/")
-    } catch (error) {
-      setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+    } catch (err) {
+      console.log(err)
     }
   };
 

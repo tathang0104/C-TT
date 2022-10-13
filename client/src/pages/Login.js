@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { login, getProfile } from '../redux/actions';
 import { currentUserLogined, currentUserLoginedToken } from "../redux/selectors";

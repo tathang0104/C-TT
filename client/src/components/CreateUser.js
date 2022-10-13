@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
-import { createUser } from "../redux/actions";
 import { useNavigate } from 'react-router-dom'
+import { createUser } from '../api'
 
 export const CreateUser = () => {
 
@@ -15,13 +14,13 @@ export const CreateUser = () => {
   
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(data)
-    dispatch(createUser.createUserRequest(data));
-    navigate('/dashboard/user');
+    createUser(data).then(data => {
+      navigate('/dashboard/product');
+    }).catch(err => {
+      console.log(err)
+    })
   };
 
   return (

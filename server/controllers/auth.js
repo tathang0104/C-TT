@@ -162,17 +162,21 @@ exports.updateUser = async (req, res, next) => {
     if (!user) {
       return next(new ErrorResponse("You have no permissions to update", 401));
     }
-    if (user.avatar_path !== '\\users\\default-avatar.jpg') {
-      fs.unlink(user.avatar_path, (err) => {
-        if (err) {
-          console.log("err", err)
-          return
-        }
-      })
+
+    if (req?.file) {
+      if (user.avatar_path !== '\\users\\default-avatar.jpg') {
+        fs.unlink(user.avatar_path, (err) => {
+          if (err) {
+            console.log("err", err)
+            return
+          }
+        })
+      }
+      
+      user.avatar_url = process.env.LOCALHOST + req.file.path;
+      user.avatar_path = req.file.path;
     }
 
-    user.avatar_url = process.env.LOCALHOST + req.file.path;
-    user.avatar_path = req.file.path;
     user.gender = req.body.gender;
     user.dob = req.body.dob;
     user.username = req.body.username;

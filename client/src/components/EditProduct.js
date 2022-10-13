@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import * as actions from '../redux/actions';
+import { updateProduct } from "../api"
 import { currentProduct } from "../redux/selectors";
 
 const EditProduct = () => {
@@ -22,6 +23,9 @@ const EditProduct = () => {
     dispatch(actions.getOneProduct.getOneProductRequest(id));
   }, [dispatch, id]);
 
+  useEffect(()=>{
+    console.log(data)
+  })
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
     if (!selectedFile) {
@@ -47,7 +51,7 @@ const EditProduct = () => {
     setData({ ...data, productPhoto: e.target.files[0]})
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('_id', data._id);
@@ -55,9 +59,10 @@ const EditProduct = () => {
     formData.append('description', data.description);
     formData.append('price', data.price);
     formData.append('category', data.category);
-    formData.append('productPhoto', data.productPhoto);
-    dispatch(actions.updateProduct.updateProductRequest(formData));
+    formData.append('productPhoto', data.productPhoto ?? data.photo_path);
+    dispatch(actions.updateProduct.updateProductRequest(formData))
     navigate('/dashboard/product');
+
   };
 
   return (

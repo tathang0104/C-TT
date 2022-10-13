@@ -31,10 +31,7 @@ const User = () => {
   
   const handleDelete = (id) => {
     dispatch(actions.deleteUser.deleteUserRequest(id))
-    setOption({
-      page: 1,
-      search: '',
-    })
+    setOption(prev => ({...prev, page: 1}))
   } 
 
   const changePage = (i) => {
