@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react'
 
-const CountUp = ({start = 0, end, timer = 100}) => {
+const CountUp = ({start = 0, end, timer = 3000/end}) => {
   const [count, setCount] = useState(null);
   const ref = useRef(start)
 
-  const accumulator = end / 2000;
+  const accumulator = end / 1500;
 
   const updateCounterState = () => {
     if (ref.current < end) {
@@ -18,7 +18,7 @@ const CountUp = ({start = 0, end, timer = 100}) => {
   }
 
   useEffect(() => {
-    let isMounted =true;
+    let isMounted = true;
     if (isMounted) updateCounterState();
 
     return () => {
