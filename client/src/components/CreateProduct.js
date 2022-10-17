@@ -106,14 +106,15 @@ const CreateProduct = () => {
               </div>
               <div className="col-12">
                 <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="category"
-                    placeholder="Category"
+                  <select className="form-select" required id="select1"
+                    value={data?.category}
                     onChange={(e) => setData({ ...data, category: e.target.value })}
-                  />
-                  <label htmlFor="category">Category</label>
+                  >
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Launch">Launch</option>
+                    <option value="Dinner">Dinner</option>
+                  </select>
+                  <label htmlFor="select1">Category</label>
                 </div>
               </div>
               <div className="col-12">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateOrder } from "../api"
 import * as actions from "../redux/actions";
 import { currentOrder } from "../redux/selectors";
 
@@ -76,9 +77,9 @@ const EditOrder = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
-    dispatch(actions.updateOrder.updateOrderRequest(data));
-    navigate('/dashboard/order');
+    updateOrder(data).then(()=> {
+      navigate('/dashboard/order');
+    })
   };
 
   return (

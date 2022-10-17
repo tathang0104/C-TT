@@ -10,14 +10,13 @@ export const CreateUser = () => {
     password: '',
     role: '',
   });
-  console.log(data);
   
   const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
     createUser(data).then(data => {
-      navigate('/dashboard/product');
+      navigate('/dashboard/user');
     }).catch(err => {
       console.log(err)
     })
@@ -71,16 +70,15 @@ export const CreateUser = () => {
               </div>
               <div className="col-md-6">
                 <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="role"
-                    placeholder="Role"
-                    value={data?.role}
-                    onChange={(e) => setData({ ...data, role: e.target.value })}
-                  />
-                  <label htmlFor="role">Role</label>
-                </div>
+                    <select className="form-select" required id="select1"
+                        value={data?.role}
+                        onChange={(e) => setData({ ...data, role: e.target.value })}
+                    >
+                      <option value="ADMIN">ADMIN</option>
+                      <option value="USER">USER</option>
+                    </select>
+                    <label htmlFor="select1">Role</label>
+                  </div>
               </div>
               <div className="col-12">
                 <button className="btn btn-primary w-100 py-3" type="submit">

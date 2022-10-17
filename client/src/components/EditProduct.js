@@ -22,10 +22,7 @@ const EditProduct = () => {
   useEffect(() => {
     dispatch(actions.getOneProduct.getOneProductRequest(id));
   }, [dispatch, id]);
-
-  useEffect(()=>{
-    console.log(data)
-  })
+  
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
     if (!selectedFile) {
@@ -60,8 +57,9 @@ const EditProduct = () => {
     formData.append('price', data.price);
     formData.append('category', data.category);
     formData.append('productPhoto', data.productPhoto ?? data.photo_path);
-    dispatch(actions.updateProduct.updateProductRequest(formData))
-    navigate('/dashboard/product');
+    updateProduct(formData).then(()=> {
+      navigate('/dashboard/product');
+    })
 
   };
 
@@ -116,15 +114,15 @@ const EditProduct = () => {
               </div>
               <div className="col-12">
                 <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="category"
+                  <select className="form-select" required id="select1"
                     value={data?.category}
-                    placeholder="Category"
                     onChange={(e) => setData({ ...data, category: e.target.value })}
-                  />
-                  <label htmlFor="category">Category</label>
+                  >
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Launch">Launch</option>
+                    <option value="Dinner">Dinner</option>
+                  </select>
+                  <label htmlFor="select1">Category</label>
                 </div>
               </div>
               <div className="col-12">

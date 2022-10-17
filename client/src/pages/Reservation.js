@@ -5,8 +5,10 @@ import useInView from '../hooks/useInView'
 import clsx from "clsx"
 import YouTube from 'react-youtube'
 import Modal from '../components/Modal'
+import dayjs from 'dayjs';
 import { OrderedMenu } from '../components/OrderedMenu'
 import { useContext} from "react";
+import TextField from '@mui/material/TextField';
 import CartContext from "../CartContext";
 import { useDispatch } from 'react-redux';
 import * as actions from '../redux/actions';
@@ -18,9 +20,12 @@ export default function Reservation() {
         setShowModal(prev => !prev)
     }
 
-    const [email, setEmail] = useState(`${localStorage.getItem('userLoginedEmail')}`);
-    const [name, setName] = useState(`${localStorage.getItem('userLoginedname')}`);
-    const [dateTime, setDateTime] = useState("");
+    // const date = dayjs().format('DD/MM/YYYY hh:mm:ss A');
+    const date = dayjs().format('YYYY-MM-DDThh:mm');
+    console.log(date)
+    const [email, setEmail] = useState(localStorage.getItem('userLoginedEmail'));
+    const [name, setName] = useState(localStorage.getItem('userLoginedname'));
+    const [dateTime, setDateTime] = useState(dayjs().format('YYYY-MM-DDThh:mm'));
     const [specialRequest, setSpecialRequest] = useState("");
     const [peopleEat, setPeopleEat] = useState("People 1");
     const [orderSuccess, setOrderSuccess] = useState(false);
@@ -50,6 +55,7 @@ export default function Reservation() {
 
     const handerSubmitFormOrderd = async (e, orders) => {
         e.preventDefault()
+        console.log(dateTime)
         if (!localStorage.getItem('authToken')) {
             navigate("/login")
         } else if (!orders || orders.length === 0) {
@@ -58,7 +64,7 @@ export default function Reservation() {
         } else {
             setOrderSuccess(true)
             const data = {
-                order_time: dateTime,
+                order_time: dayjs(dateTime).format('DD/MM/YYYY hh:mm:ss A'),
                 special_request: specialRequest,
                 detail_order: orders
             }
@@ -74,7 +80,7 @@ export default function Reservation() {
             try {
                 const { data } = await axios.post(
                     "/api/client/bookingtable",
-                    { email, orders, name, dateTime, peopleEat, specialRequest },
+                    { email, orders, name, dateTime: dayjs(dateTime).format('DD/MM/YYYY hh:mm:ss A'), peopleEat, specialRequest },
                     config
                 );
                 
@@ -133,13 +139,16 @@ export default function Reservation() {
                                     </div>
                                 }
                                 <div className="col-md-6">
-                                    <div className="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" className="form-control datetimepicker-input" required id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" 
-                                            value={dateTime}
-                                            onChange={(e) => setDateTime(e.target.value)}
-                                        />
-                                        <label htmlFor="datetime">Date & Time</label> 
-                                    </div>
+                                    <TextField
+                                        id="datetime-local"
+                                        type="datetime-local"
+                                        defaultValue={dateTime}
+                                        onChange={(e) => setDateTime(e.target.value)}
+                                        sx={{ width: "100%", backgroundColor: "white" }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-floating">

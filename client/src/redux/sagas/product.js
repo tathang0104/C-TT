@@ -6,7 +6,6 @@ function* fetchProductsSaga(action) {
   try {
     const payload = action?.payload ? action?.payload : {page: 1, size: 10, category: '', search: ''}
     const products = yield call(api.fetchProducts, payload);
-    console.log(products.data)
     yield put(actions.getProducts.getProductsSuccess(products.data));
   } catch (err) {
     console.error(err);
@@ -39,7 +38,6 @@ function* createProductSaga(action) {
   try {
     const products = yield call(api.createProduct, action.payload);
     yield put(actions.createProduct.createProductSuccess(products.data));
-    // yield fetchProductsSaga({page:1, size:5});
   } catch (err) {
     console.error(err);
     yield put(actions.createProduct.createProductFailure(err));
@@ -49,8 +47,6 @@ function* createProductSaga(action) {
 function* updateProductSaga(action) {
   try {
     const updatedProduct = yield call(api.updateProduct, action.payload);
-    console.log(updatedProduct.data);  
-    console.log(1);
     yield put(actions.updateProduct.updateProductSuccess(updatedProduct.data));
   } catch (err) {
     yield put(actions.updateProduct.updateProductFailure(err));

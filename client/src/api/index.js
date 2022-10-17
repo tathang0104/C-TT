@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:5000/api';
+const URL = '/api';
 const User_URL = `${URL}/auth`;
 const Product_URL = `${URL}/product`;
 // const Client_URL = `${URL}/client`;
@@ -40,15 +40,12 @@ export const dashboard = () => axios.get(`${URL}/private`, {
 });
 
 // User
-export const fetchAllUsers = (payload) => 
-{
-  console.log(payload);
-  return axios.get(`${User_URL}?page=${payload.page}&size=${payload.size}&search=${payload.search}`, {
+export const fetchAllUsers = (payload) => axios.get(`${User_URL}?page=${payload.page}&size=${payload.size}&search=${payload.search}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
   }
-})}
+})
 
 
 export const fetchOneUser = (payload) => axios.get(`${User_URL}/${payload}`, {

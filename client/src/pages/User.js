@@ -17,10 +17,7 @@ const User = () => {
     size: 10,
     search: '',
   });
-  useEffect(() => {
-    console.log(total)
-  }, [total]);
-
+  
   useEffect(() => {
     dispatch(actions.getAllUsers.getAllUsersRequest(option));
   }, [dispatch, option]);

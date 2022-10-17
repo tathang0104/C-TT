@@ -8,7 +8,6 @@ import * as api from '../../api';
 function* loginSaga(action) {
   try {
     const user = yield call(api.login, action.payload);
-    console.log(user.data)
     localStorage.setItem("authToken", user.data.token);
     yield put(actions.login.loginSuccess(user.data));
   } catch (err) {
@@ -20,7 +19,6 @@ function* loginSaga(action) {
 function* registerSaga(action) {
   try {
     const user = yield call(api.register, action.payload);
-    console.log(user.data)
     localStorage.setItem("authToken", user.data.token);
     yield put(actions.register.registerSuccess(user.data));
   } catch (err) {
@@ -101,8 +99,7 @@ function* updateProfileUserSaga(action) {
 
 function* deleteUserSaga(action) {
   try {
-    const deletedUser = yield call(api.deleteUser, action.payload );
-    console.log(deletedUser.data)
+    yield call(api.deleteUser, action.payload );
     yield fetchAllUsersSaga()
   } catch (err) {
     console.error(err);

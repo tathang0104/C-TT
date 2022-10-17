@@ -32,7 +32,7 @@ const UserSchema = new Schema(
     },
     avatar_url: {
       type: String,
-      default: 'localhost:5000/uploads\\users\\default-avatar.jpg'
+      default: '192.168.1.227:5000/uploads\\users\\default-avatar.jpg'
     },
     avatar_path: {
       type: String,

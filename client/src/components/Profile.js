@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { updateUser } from "../api"
 import * as actions from '../redux/actions';
 import { currentUserLogined, currentUserLoginedToken } from "../redux/selectors";
 
@@ -64,8 +64,9 @@ export const Profile = () => {
       formData.append('dob', dataUser.dob);
       formData.append('address', dataUser.address);
       formData.append('user_avatar', dataUser.user_avatar);
-      dispatch(actions.updateProfileUser.updateProfileUserRequest(formData));
-      navigate(-1);
+      updateUser(formData).then(()=> {
+        navigate(-1);
+      });
     };
     return (
         <>
