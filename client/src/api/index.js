@@ -5,6 +5,8 @@ const User_URL = `${URL}/auth`;
 const Product_URL = `${URL}/product`;
 // const Client_URL = `${URL}/client`;
 const Order_URL = `${URL}/order`;
+const Vote_URL = `${URL}/vote`;
+const Comment_URL = `${URL}/comment`;
 
 const config = {
   headers: {
@@ -172,4 +174,20 @@ export const deleteOrder = (id) => axios.delete(`${Order_URL}/delete/${id}`, {
   }
 });
 
+// vote on product
 
+export const getVoteById = (id) => axios.get(`${Vote_URL}/${id}`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});
+
+//comment on product
+
+export const getCommentById = (id) => axios.get(`${Comment_URL}/${id}`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});

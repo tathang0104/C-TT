@@ -9,12 +9,13 @@ import { useContext} from "react";
 import CartContext from '../../CartContext';
 import { productsState, totalPage } from '../../redux/selectors'; 
 import { useDispatch, useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 import * as actions from '../.././redux/actions';
 
 export default function Menu() {
     const title = useInView()
     
-    const {showModal, addToCard, handerShow, currentMeal, quantityValue, handerChangeQuantity, increase, decrease, handerOder} = useContext(CartContext)
+    const {showModal, addToCard, handerShow, currentMeal, quantityValue, handerChangeQuantity, increase, decrease, handerOder, voteData, commentData} = useContext(CartContext)
     
     const dispatch = useDispatch();
     const products = useSelector(productsState);
@@ -22,6 +23,8 @@ export default function Menu() {
     const [showTabPane, setShowTapPane] = useState([true, false, false, false]);
     const [inputSearch, setInputSearch] = useState("");
     const pagination = []
+    const star = []
+    const comment = []
     const [option, setOption] = useState({
         page: 1,
         size: 10,
@@ -53,24 +56,25 @@ export default function Menu() {
 
     const changePage = (i) => {
         setOption(prev => ({...prev, page: i}))
-      } 
-      for(let i = 0; i < total; i++) {
+    }
+
+    for (let i = 0; i < total; i++) {
         pagination.push(
-          <li key={i}>
+            <li key={i}>
             <Link to={'#'} onClick={()=>{changePage(i+1)}} className={clsx({"active": i + 1 === option.page} )}>{i + 1}</Link>
-          </li>
+            </li>
         )
-      }
-    
-      const prev = (page)=>{
+    }
+
+    const prev = (page)=>{
         if(option.page !== 1)
-          setOption(prev => ({...prev, page: page-1}))
-      }
-    
-      const next = (page)=>{
+            setOption(prev => ({...prev, page: page-1}))
+    }
+
+    const next = (page)=>{
         if(option.page !== total)
-          setOption(prev => ({...prev, page: page+1}))
-      }
+            setOption(prev => ({...prev, page: page+1}))
+    }
     
     const menuBars = menuBar.map((item, index) => {
         return (
@@ -114,6 +118,60 @@ export default function Menu() {
         e.preventDefault()
         setOption(prev => ({...prev, search: inputSearch }))
     }
+    
+    for (let i = 1; i < 6; i++) {
+        if ( i <= voteData.avgStar) {
+            star.push(
+                <div className="star voted-star" key={`star-${i}`}></div>
+            )
+        } else if ( typeof(voteData.avgStar) !== "integer" && i < voteData.avgStar + 1 ) {
+            star.push(
+                <div className="star half-star" key={`star-${i}`}></div>
+            )
+        } else {
+            star.push(
+                <div className="star" key={`star-${i}`}></div>
+            )
+        } 
+    }
+
+    const comments = commentData?.data?.map((item)=>{
+        return (
+            <div className="comment-card" key={item._id}>
+                <div className="row">
+                    <div className="col-md-3">
+                        <div className="comment-users">
+                            <img src={`http://${item.user_id.avatar_url}`} alt="user_avt"/> 
+                            <span className="border-0">{item.user_id.username}</span>
+                        </div>
+                    </div>
+                    <div className="col-md-9">
+                        <div className="comment-scrip">
+                            <p className='comment-content'>{item.content}</p>
+                            <div className="comment-time">
+                                {
+                                    ( localStorage.getItem('userLoginedRole') === "ADMIN" || localStorage.getItem("userLoginedname") === `${item.user_id.username}` ) 
+                                    && (
+                                       <div className="float-left delete-comment-btn"><i className="far fa-trash-alt icon-delete"></i></div> 
+                                    )
+                                }
+                                <div className="float-right">
+                                    Posted at {dayjs(item.updatedAt).format('DD-MM-YYYY hh:mm') }
+                                    {/* Posted at 00h */}
+                                </div>
+                                <div className="float-clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    })
+    // for (let i = 0; i < commentData.count; i++) {
+    //     // comment.push(
+            
+    //     // )
+    // }
 
   return (
     <div className="container-xxl py-5">
@@ -155,29 +213,34 @@ export default function Menu() {
     {
         showModal &&
         <Modal isShow={showModal} title="Your order" handlerShow={handerShow} >
-            <div className="row g-4 m-4">
+            <div className="row g-4 m-4 mt-1">
                 <h1 className="text-center text-primary m-0 p-0">Order</h1>
                 <MenuDetail id={currentMeal._id} photo_url={currentMeal.photo_url} name={currentMeal.name} price={currentMeal.price} description={currentMeal.description}/>
-                <div className="col-lg-6 d-flex flex-column">
-                    <div className='d-flex justify-content-around align-items-center'>
-                    <div>{currentMeal.quantity} {currentMeal.quantity > 1 ? "products" : "product"} are available</div>
+                <div className="col-lg-6 d-flex flex-column mt-1">
+                    <div className="d-flex">
+                        {star}
+                        <div className='px-2'>({voteData.count})</div>
+                    </div>
+                    <div className='d-flex justify-content-between align-items-center'>
+                        <div>Products are available</div>
                         <div className="mr-2 text-end">Among: </div>
                         <i className="fa fa-minus-square text-primary cursor-pointer" onClick={()=>decrease(currentMeal)}></i>
                         <input type="text" readOnly={true} className='w-15 text-center' value={quantityValue} onChange={(e)=>handerChangeQuantity(e)} />
                         <i className="fa fa-plus-square text-primary cursor-pointer" onClick={()=>increase(currentMeal)}></i>
                     </div>
-                    <h6 className="d-flex w-100 error text-danger justify-content-end ">{null}</h6>
-                    <div className="d-flex justify-content-end align-items-center" style={{height: "50px"}}>
+                    <h6 className='d-flex w-100 error text-danger justify-content-end'>{null}</h6>
+                    <div className="d-flex justify-content-end align-items-center" style={{height: "30px"}}>
                         <div className=''>Total price: </div>
-                            <div className="w-25 text-end">{quantityValue * currentMeal.price } $</div>
+                            <div className="w-25 fw-bold text-end">{quantityValue * currentMeal.price } $</div>
                     </div>
                     <div className='d-flex justify-content-end align-items-center'>
                         <button className='btn btn-primary d-flex justify-content-around align-items-center' onClick={()=>handerOder(currentMeal)}>
-                            <i className='fa fa-cart-arrow-down p-1'></i>
-                            <div className=''>Add to cart</div>
+                            <i className='fa fa-cart-arrow-down'></i>
+                            <div className='' style={{fontSize: "12px", marginLeft: "10px"}}>Add to cart</div>
                         </button>
                     </div>
                 </div>
+                {comments}
             </div>
         </Modal>
     }

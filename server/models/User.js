@@ -27,12 +27,12 @@ const UserSchema = new Schema(
     }, 
     role: {
       type: String,
-      enum: ["USER", "ADMIN"],
+      enum: ["USER", "ADMIN", "STAFF"],
       default: "USER"
     },
     avatar_url: {
       type: String,
-      default: '192.168.1.227:5000/uploads\\users\\default-avatar.jpg'
+      default: 'localhost:5000/uploads\\users\\default-avatar.jpg'
     },
     avatar_path: {
       type: String,

@@ -173,8 +173,21 @@ const EditOrder = () => {
                   </div>
                 );
               })}
+              <div className="col-md-7">
+                <div className="form-floating">
+                    <select className="form-select" required id="select1"
+                        value={data?.role || ''}
+                        onChange={(e) => setData({ ...data, role: e.target.value })}
+                    >
+                      <option value="PREPARE">PREPARE</option>
+                      <option value="COMPLETE">COMPLETE</option>
+                      <option value="PAYED">PAYED</option>
+                    </select>
+                    <label htmlFor="select1">Status</label>
+                  </div>
+              </div>
               <h4 className="col-12">Total price: {totalPrice}</h4>
-              <div className="col-6">
+              <div className="col-4">
                 <button
                   className="btn btn-primary w-50 py-3 mr-5"
                   type="submit"
@@ -182,7 +195,7 @@ const EditOrder = () => {
                   Edit Order
                 </button>
               </div>
-              <div className="col-6">
+              <div className="col-4">
                 <button
                   onClick={handerBack}
                   className="btn btn-danger w-50 py-3"

@@ -75,6 +75,7 @@ export const CreateUser = () => {
                         onChange={(e) => setData({ ...data, role: e.target.value })}
                     >
                       <option value="ADMIN">ADMIN</option>
+                      <option value="STAFF">STAFF</option>
                       <option value="USER">USER</option>
                     </select>
                     <label htmlFor="select1">Role</label>

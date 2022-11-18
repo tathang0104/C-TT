@@ -7,8 +7,8 @@ const errorHandler = require("./middleware/error");
 connectDB();
 var cookieParser = require("cookie-parser")
 app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use('/uploads', express.static('uploads'));
 
@@ -36,6 +36,11 @@ app.use("/api/private", require("./routes/private"));
 app.use("/api/client", require("./routes/client"));
 app.use("/api/product", require("./routes/product"));
 app.use("/api/order", require("./routes/order"));
+app.use("/api/comment", require("./routes/comment"));
+app.use("/api/vote", require("./routes/vote"));
+app.use("/api/payment", require("./routes/payment"));
+
+
 
 // Error Handler Middleware
 app.use(errorHandler);

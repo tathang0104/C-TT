@@ -3,12 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { productsState } from "./redux/selectors"; 
 import * as actions from './redux/actions';
 import { useNavigate } from "react-router";
+import { getCommentById, getVoteById } from "./api";
 
 const CartContext = createContext();
 
 export function CartProvider({children}) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [voteData, setVoteData] = useState({
+        avgStar: 0,
+        count: 0
+    })
+    const [commentData, setcommentData] = useState({
+        success: false,
+        count: 0,
+        data: [],
+        page: 0,
+        size: 0,
+        totalpage: 0,
+    })
     const [showModal, setShowModal] = useState(false);
     const [orders, setOrders] = useState([]);
     const [currentMeal, setcurrentMeal] = useState(null);
@@ -23,6 +36,10 @@ export function CartProvider({children}) {
 
     const handerShow = () => {
         setShowModal(prev => !prev)
+        setVoteData({
+            avgStar: 0,
+            count: 0
+        })
     }
 
     useEffect(() => {
@@ -57,6 +74,20 @@ export function CartProvider({children}) {
     }
     
     const addToCard = (id) => { 
+        getVoteById(id).then((data)=>{
+            console.log(data.data.vote[0])
+            const vote = data.data.vote[0]
+            if (vote) {
+                setVoteData(vote)
+            }
+        })
+        getCommentById(id).then((data)=>{
+            console.log(data.data)
+            const comments = data.data
+            if (comments) {
+                setcommentData(comments)
+            }
+        })
         orders?.length === 0 && setquantityValue(0)
         const detail = products.find(item => item._id === id)
         setcurrentMeal(detail)
@@ -110,7 +141,7 @@ export function CartProvider({children}) {
 
     return (
         <CartContext.Provider 
-            value={{showModal, orders, currentMeal, quantityValue, setOrdersContext, handerShow, handerChangeQuantity, increase, decrease, addToCard, handerOder, handerDelete}}
+            value={{showModal, orders, currentMeal, quantityValue, voteData, commentData, setOrdersContext, handerShow, handerChangeQuantity, increase, decrease, addToCard, handerOder, handerDelete}}
         >
             {children}
         </CartContext.Provider>

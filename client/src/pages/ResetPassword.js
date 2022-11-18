@@ -100,7 +100,7 @@ const ResetPassword = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       tabIndex={2}
                     />
-                    <label htmlFor="password">New Password:</label>
+                    <label htmlFor="password">Confirm new Password:</label>
                   </div>
                 </div>
               </div>

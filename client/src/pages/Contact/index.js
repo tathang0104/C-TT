@@ -23,7 +23,7 @@ export default function Contact() {
                 </h5>
                 <p>
                   <i className="fa fa-envelope-open text-primary me-2"></i>
-                  book@example.com
+                  anhborestoranbooking@gmail.com
                 </p>
               </div>
               <div className="col-md-4">
@@ -32,7 +32,7 @@ export default function Contact() {
                 </h5>
                 <p>
                   <i className="fa fa-envelope-open text-primary me-2"></i>
-                  info@example.com
+                  anhborestoraninfo@gmail.com
                 </p>
               </div>
               <div className="col-md-4">
@@ -41,7 +41,7 @@ export default function Contact() {
                 </h5>
                 <p>
                   <i className="fa fa-envelope-open text-primary me-2"></i>
-                  tech@example.com
+                  anhborestorantech@gmail.com
                 </p>
               </div>
             </div>

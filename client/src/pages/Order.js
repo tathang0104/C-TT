@@ -132,7 +132,7 @@ const Order = () => {
                   </td>
                   <td>
                     <img style={{height: '25px', width: '25px'}} src='/img/edit.png' alt="" className='p-1 cursor-pointer' onClick={() => handleEdit(order?._id)}/>
-                    <img style={{height: '25px', width: '25px'}} src='/img/delete.png' alt="" className='p-1 cursor-pointer' onClick={() => {if (window.confirm('Are you sure to delete this order?')) {handleDelete(order._id)}}}/>
+                    {/* <img style={{height: '25px', width: '25px'}} src='/img/delete.png' alt="" className='p-1 cursor-pointer' onClick={() => {if (window.confirm('Are you sure to delete this order?')) {handleDelete(order._id)}}}/> */}
                   </td>
                 </tr>
               )
