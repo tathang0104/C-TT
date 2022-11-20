@@ -27,7 +27,7 @@ const ProductSchema = new Schema(
     category: {
       type: String,
       enum: ["Breakfast", "Launch","Dinner"],
-      required: [true, "Please provide product category name"],
+      default: 'Breakfast',
     }
   },
   { timestamps: true }

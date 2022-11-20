@@ -23,8 +23,7 @@ exports.getCommentByIdProduct = async (req, res, next) => {
 };
 
 exports.createComment = async (req, res, next) => {
-    const { content } = req.body; 
-    const product_id = req.query.product_id; 
+    const { content, product_id } = req.body; 
   
     try {
       const comment = await Comment.create({

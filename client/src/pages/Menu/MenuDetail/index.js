@@ -1,9 +1,47 @@
-import { useContext} from "react";
+import { useContext, useEffect, useMemo, useState} from "react";
+import { getVoteById } from "../../../api";
 import CartContext from "../../../CartContext";
 
-export const MenuDetail = (props) => {
+export const MenuDetail = (props, {children}) => {
 
   const { addToCard } = useContext(CartContext)
+  let star = []
+  const [voteData, setVoteData] = useState({
+    avgStar: 0,
+    count: 0
+  })
+
+  useEffect(()=>{
+    if (props._id) {
+      getVoteById(props._id).then((data)=>{
+        const vote = data.data.vote[0]
+        if (vote) {
+            setVoteData(vote)
+        }
+      })
+    }
+
+    return () => {
+      star = []
+  }
+  },[props._id])
+
+
+  for (let i = 1; i < 6; i++) {
+    if ( i <= voteData.avgStar) {
+        star.push(
+            <span className="star voted-star" key={`star-${i}`}></span>
+        )
+    } else if ( typeof(voteData.avgStar) !== "integer" && i < voteData.avgStar + 1 ) {
+        star.push(
+            <span className="star half-star" key={`star-${i}`}></span>
+        )
+    } else {
+        star.push(
+            <span className="star" key={`star-${i}`}></span>
+        )
+    } 
+  }
 
   return (
     <>
@@ -20,7 +58,12 @@ export const MenuDetail = (props) => {
           />
           <div className="w-100 d-flex flex-column text-start ps-4">
             <h5 className="d-flex justify-content-between border-bottom pb-2">
-              <span>{props.name}</span>
+              <span className="d-flex justify-content-center align-item-center">
+                {props.name}
+                <span className='px-2'>{star}</span>
+                <span style={{fontWeight: "500", fontSize: "14px"}}>({voteData.count})</span>
+              </span>
+              
               <span className="text-primary">${props.price}</span>
             </h5>
             <small className="fst-italic">

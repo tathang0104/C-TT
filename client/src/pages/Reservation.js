@@ -22,7 +22,6 @@ export default function Reservation() {
 
     // const date = dayjs().format('DD/MM/YYYY hh:mm:ss A');
     const date = dayjs().format('YYYY-MM-DDThh:mm');
-    console.log(date)
     const [email, setEmail] = useState(localStorage.getItem('userLoginedEmail'));
     const [name, setName] = useState(localStorage.getItem('userLoginedname'));
     const [dateTime, setDateTime] = useState(dayjs().format('YYYY-MM-DDThh:mm'));
@@ -68,7 +67,6 @@ export default function Reservation() {
                 special_request: specialRequest,
                 detail_order: orders
             }
-            console.log(data)
             dispatch(actions.createOrder.createOrderRequest(data));
 
             const config = {

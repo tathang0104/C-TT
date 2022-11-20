@@ -18,17 +18,11 @@ const OrderSchema = new Schema(
       type: String,
       default: ''
     },
-    detail_order: [
-      {
-        product_id: {
-          type: Schema.Types.ObjectId, ref: 'Product'
-        },
-        quantity_order: {
-          type: Number,
-          min: 0,
-        }
-      }
-    ]
+    status: {
+      type: String,
+      enum: ["PREPARE", "COMPLETE", "PAID"],
+      default: "PREPARE",
+    },
   },
   { timestamps: true}
 );

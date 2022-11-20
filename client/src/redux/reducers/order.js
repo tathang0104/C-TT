@@ -9,7 +9,6 @@ export default function productsReducers(state = INIT_STATE.order, action) {
         isLoading: true,
       };
     case getType(getOneOrder.getOneOrderSuccess):
-      // console.log(action.payload.data)
       return {
         ...state,
         isLoading: true,

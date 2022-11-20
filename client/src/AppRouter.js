@@ -29,6 +29,8 @@ import { CreateUser } from "./components/CreateUser";
 import AdminRoute from "./components/routing/AdminRoute";
 import EditOrder from "./components/EditOrder";
 import { SelfOrder } from "./components/SelfOrder";
+import { Feedback } from "./components/Feedback";
+import { CheckOut } from "./pages/CheckOut";
 
 export const AppRouter = () => {
   return (
@@ -65,6 +67,8 @@ export const AppRouter = () => {
         }/>
         <Route path="profile" element={<Profile />} />
         <Route path="selfOrder" element={<SelfOrder />} />
+        <Route path="selfOrder/feedback/:id" element={<Feedback />} />
+        <Route path="checkOut/:id" element={<CheckOut />} />
         
         <Route path='user' element={
           <PrivateRoute>

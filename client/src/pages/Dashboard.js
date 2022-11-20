@@ -6,7 +6,8 @@ import { currentUserLogined, dashboardState } from "../redux/selectors";
 import BarChart from "../components/BarChart";
 
 const Dasboard = () => {
-  const [userData, setUserData] = useState(null);
+  const [data, setData] = useState(null);
+  const [dataRevenue, setDataRevenue] = useState(null);
   const dispatch = useDispatch()
   const userLogined = useSelector(currentUserLogined);
   const dashboardData = useSelector(dashboardState);
@@ -21,17 +22,16 @@ const Dasboard = () => {
   useEffect(() => {
     dispatch(getDashboard.getDashboardRequest())
   }, [dispatch]);
-  console.log(dashboardData?.userPerMonth)
 
 
   useEffect(() => {
-    setUserData({
+    setData({
       labels: dashboardData?.userPerMonth?.map((data) => data.lable),
       datasets: [
         {
           label: "Users Gained",
           data: dashboardData?.userPerMonth?.map((data) => data.Count),
-          backgroundColor: "#FEA116",
+          backgroundColor: "#ff80ed",
           borderColor: "#0F172B",
           borderWidth: 1,
         },
@@ -41,23 +41,39 @@ const Dasboard = () => {
           backgroundColor: "#C7372F",
           borderColor: "#0F172B",
           borderWidth: 1,
-        },
+        }
+      ],
+    })
+
+    setDataRevenue({
+      labels: dashboardData?.revenuePerMonth?.map((data) => data.lable),
+      datasets: [
         {
-          label: "Products Gained",
-          data: dashboardData?.productPerMonth?.map((data) => data.Count),
-          backgroundColor: "#00A465",
+          label: "Reveneu Gained (unit : dollars)",
+          data: dashboardData?.revenuePerMonth?.map((data) => data.Sum),
+          backgroundColor: "#FEA116",
           borderColor: "#0F172B",
           borderWidth: 1,
         },
       ],
     })
   }, [dashboardData]);
+
   return (
     <>
-      {<h1 className="">Hello {userLogined?.user.username}, {userLogined?.user.email}</h1>}
+      {<h1 className="text-primary">Hello {userLogined?.user.role} {userLogined?.user.username} !</h1>}
       <div className="row">
-        <div className="col-md-12">
-          {userData && <BarChart chartData={userData} />}
+        <div className="col-md-6">
+          <div className="mt-3">
+            {dataRevenue && <BarChart chartData={dataRevenue} />}
+          </div>
+          <h5 className=" mt-3 text-center" style={{fontWeight: 600, fontStyle: "italic"}}>Chart 1. Reveneu per month</h5>
+        </div>
+        <div className="col-md-6">
+          <div className="mt-3">
+            {data && <BarChart chartData={data} />}
+          </div>
+          <h5 className=" mt-3 text-center" style={{fontWeight: 600, fontStyle: "italic"}}>Chart 2. User and Order gained per month</h5>
         </div>
       </div>
     </>

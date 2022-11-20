@@ -1,14 +1,66 @@
 const OrderedMenu = require("../models/OrderedMenu");
+const DetailOrder = require("../models/DetailOrder");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.getOneOrder = async (req, res, next) => {
   try {
-    const order = await OrderedMenu.findOne({_id: req.params._id})
-    .populate('user_id')
-    .populate({
-      path: 'detail_order.product_id',
-      select:
-        'name price photo_url category',
-    });
+    const _id = (req.params._id)
+    const order = await OrderedMenu.aggregate([
+      { $match: { _id: ObjectId(_id) } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user_id"
+        }
+      },
+      {
+        $lookup: {
+          from: "detail_orders",
+          localField: "_id",
+          foreignField: "order_id",
+          as: "detail_order"
+        }
+      },
+      {
+        $unwind: {
+          path: "$detail_order",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $unwind: {
+          path: "$user_id",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "detail_order.product_id",
+          foreignField: "_id",
+          as: "detail_order.product_id"
+        }
+      },
+      {
+        $unwind: {
+          path: "$detail_order.product_id",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $group: {
+          _id : "$_id",
+          user_id: { $first: "$user_id" },
+          order_time: { $first: "$order_time" },
+          special_request: { $first: "$special_request" },
+          status: { $first: "$status" },
+          detail_order: { $push: "$detail_order" }
+        }
+      },
+    ])
     res.status(200).json({ success: true, data: order });
   } catch (err) {
     next(err);
@@ -22,20 +74,70 @@ exports.searchOrder = async (req, res, next) => {
   
   try {
     let totalPage
-    const order = await OrderedMenu
-    .find()
-    .populate({
-      path: 'user_id',
-      match: { username: { $regex: search, $options: "i" }},
-      select:
-        'username',
-    })
-    .populate({
-      path: 'detail_order.product_id',
-      select:
-        'name price photo_url category',
-    })
-    .sort("-updatedAt")
+    const order = await OrderedMenu.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user_id",
+          pipeline: [
+            {
+              $match: {
+                username: { $regex: search, $options: "i" }
+              },
+            }
+          ]
+        }
+      },
+      {
+        $lookup: {
+          from: "detail_orders",
+          localField: "_id",
+          foreignField: "order_id",
+          as: "detail_order"
+        }
+      },
+      {
+        $unwind: {
+          path: "$detail_order",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $unwind: {
+          path: "$user_id",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "detail_order.product_id",
+          foreignField: "_id",
+          as: "detail_order.product_id"
+        }
+      },
+      {
+        $unwind: {
+          path: "$detail_order.product_id",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $group: {
+          _id : "$_id",
+          user_id: { $first: "$user_id" },
+          order_time: { $first: "$order_time" },
+          updatedAt: { $first: "$updatedAt" },
+          createdAt: { $first: "$createdAt" },
+          special_request: { $first: "$special_request" },
+          status: { $first: "$status" },
+          detail_order: { $push: "$detail_order" }
+        }
+      },
+      {$sort: {"updatedAt": -1}},
+    ])
     const count = order.filter(order => order.user_id !== null).length
     totalPage = Math.ceil(count / size)
     const newOrder = order.filter(order => order.user_id !== null).slice((page-1)*size, page*size)
@@ -46,27 +148,59 @@ exports.searchOrder = async (req, res, next) => {
   }
 };
 
-
 exports.getSelfOrder = async (req, res, next) => {
   let page = parseInt(req.query.page) || 1
   let size = parseInt(req.query.size) || 5
   // let search = req.query.search || ""
   try {
     let totalPage
-    const order = await OrderedMenu.find({user_id: req.user._id})
-    .populate({
-      path: 'user_id',
-      select:
-        'username',
-    })
-    .populate({
-      path: 'detail_order.product_id',
-      select:
-        'name price photo_url category',
-    })
-    .sort('-updatedAt')
-    .skip((size * page) - size)
-    .limit(size)
+    const order = await OrderedMenu.aggregate([
+      { $match: { user_id: ObjectId(req.user._id)} },
+      {
+        $lookup: {
+          from: "detail_orders",
+          localField: "_id",
+          foreignField: "order_id",
+          as: "detail_order"
+        }
+      },
+      {
+        $unwind: {
+          path: "$detail_order",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+     
+      {
+        $lookup: {
+          from: "products",
+          localField: "detail_order.product_id",
+          foreignField: "_id",
+          as: "detail_order.product_id"
+        }
+      }, 
+      {
+        $unwind: {
+          path: "$detail_order.product_id",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $group: {
+          _id : "$_id",
+          user_id: { $first: "$user_id" },
+          order_time: { $first: "$order_time" },
+          updatedAt: { $first: "$updatedAt" },
+          createdAt: { $first: "$createdAt" },
+          special_request: { $first: "$special_request" },
+          status: { $first: "$status" },
+          detail_order: { $push: "$detail_order" }
+        }
+      },
+      {$sort: {"updatedAt": -1}},
+      { $skip: page * size - size},
+      { $limit: size},
+    ])
     const count = await OrderedMenu.find({user_id: req.user._id}).count()
     totalPage = Math.ceil(count / size)
     res.status(200).json({ success: true, count: order.length, data: order, page, totalPage});
@@ -105,19 +239,24 @@ exports.createOrder = async (req, res, next) => {
     const order = await OrderedMenu.create({
       user_id : req.user._id,
       order_time,
-      special_request,
-      detail_order,
-    });
+      special_request
+    })
+
+    const newDetail = detail_order.map((item)=> {
+      return {
+        ...item,
+        order_id: order._id,
+      }
+    })
     
-    res.status(200).json({ success: true, data: order });
+    const detail = await DetailOrder.create(newDetail);
+    res.status(200).json({ success: true, data: order, data_detail: detail });
   } catch (err) {
     next(err);
   }
 };
 
 exports.updateOrder = async (req, res, next) => {
-  console.log(req.body)
-  console.log(req.params)
 
     try {
         const order = await OrderedMenu.findOne({_id: req.params._id});
@@ -128,7 +267,7 @@ exports.updateOrder = async (req, res, next) => {
     
         order.order_time = req.body.order_time;
         order.special_request = req.body.special_request;
-        order.detail_order = req.body.detail_order;
+        order.status = req.body.status;
     
         await order.save();
     

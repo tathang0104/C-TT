@@ -11,6 +11,7 @@ import { productsState, totalPage } from '../../redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import * as actions from '../.././redux/actions';
+import { deleteComment } from '../../api';
 
 export default function Menu() {
     const title = useInView()
@@ -23,8 +24,6 @@ export default function Menu() {
     const [showTabPane, setShowTapPane] = useState([true, false, false, false]);
     const [inputSearch, setInputSearch] = useState("");
     const pagination = []
-    const star = []
-    const comment = []
     const [option, setOption] = useState({
         page: 1,
         size: 10,
@@ -118,26 +117,10 @@ export default function Menu() {
         e.preventDefault()
         setOption(prev => ({...prev, search: inputSearch }))
     }
-    
-    for (let i = 1; i < 6; i++) {
-        if ( i <= voteData.avgStar) {
-            star.push(
-                <div className="star voted-star" key={`star-${i}`}></div>
-            )
-        } else if ( typeof(voteData.avgStar) !== "integer" && i < voteData.avgStar + 1 ) {
-            star.push(
-                <div className="star half-star" key={`star-${i}`}></div>
-            )
-        } else {
-            star.push(
-                <div className="star" key={`star-${i}`}></div>
-            )
-        } 
-    }
 
     const comments = commentData?.data?.map((item)=>{
         return (
-            <div className="comment-card" key={item._id}>
+            <div className="comment-card" key={item._id} id={item._id}>
                 <div className="row">
                     <div className="col-md-3">
                         <div className="comment-users">
@@ -152,12 +135,14 @@ export default function Menu() {
                                 {
                                     ( localStorage.getItem('userLoginedRole') === "ADMIN" || localStorage.getItem("userLoginedname") === `${item.user_id.username}` ) 
                                     && (
-                                       <div className="float-left delete-comment-btn"><i className="far fa-trash-alt icon-delete"></i></div> 
+                                        <div className="float-left delete-comment-btn" onClick={()=>{
+                                            deleteComment(item._id);
+                                            document.getElementById(`${item._id}`).remove();
+                                        }}><i className="far fa-trash-alt icon-delete"></i></div> 
                                     )
                                 }
                                 <div className="float-right">
-                                    Posted at {dayjs(item.updatedAt).format('DD-MM-YYYY hh:mm') }
-                                    {/* Posted at 00h */}
+                                    Posted at { dayjs(item.updatedAt).format('DD-MM-YYYY hh:mm') }
                                 </div>
                                 <div className="float-clear"></div>
                             </div>
@@ -167,11 +152,6 @@ export default function Menu() {
             </div>
         )
     })
-    // for (let i = 0; i < commentData.count; i++) {
-    //     // comment.push(
-            
-    //     // )
-    // }
 
   return (
     <div className="container-xxl py-5">
@@ -215,12 +195,8 @@ export default function Menu() {
         <Modal isShow={showModal} title="Your order" handlerShow={handerShow} >
             <div className="row g-4 m-4 mt-1">
                 <h1 className="text-center text-primary m-0 p-0">Order</h1>
-                <MenuDetail id={currentMeal._id} photo_url={currentMeal.photo_url} name={currentMeal.name} price={currentMeal.price} description={currentMeal.description}/>
+                <MenuDetail _id={currentMeal._id} photo_url={currentMeal.photo_url} name={currentMeal.name} price={currentMeal.price} description={currentMeal.description}/>
                 <div className="col-lg-6 d-flex flex-column mt-1">
-                    <div className="d-flex">
-                        {star}
-                        <div className='px-2'>({voteData.count})</div>
-                    </div>
                     <div className='d-flex justify-content-between align-items-center'>
                         <div>Products are available</div>
                         <div className="mr-2 text-end">Among: </div>

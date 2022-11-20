@@ -14,15 +14,18 @@ const EditOrder = () => {
   const [totalPrice, setTotalPrice] = useState();
   
   useEffect(() => {
-    setData(order);
+    if (order)
+    setData(order[0]);
   }, [order]);
 
   useEffect(() =>{
     let sum = 0
-    for (let i = 0; i < data?.detail_order.length; i++) {
-      sum = sum + data?.detail_order[i].quantity_order * data?.detail_order[i].product_id.price
+    if (data) {
+      for (let i = 0; i < data?.detail_order?.length; i++) {
+        sum = sum + data?.detail_order[i].quantity_order * data?.detail_order[i].product_id.price
+      }
+      setTotalPrice(sum)
     }
-    setTotalPrice(sum)
   },[data])
 
   useEffect(() => {
@@ -30,6 +33,7 @@ const EditOrder = () => {
   }, [dispatch, id]);
 
   const increaseOrderedValue = (id, value) => {
+    document.getElementById(`err-${id}`).innerHTML = ``
     const newDetail = data?.detail_order?.map((order) => {
       return order.product_id._id === id
         ? { ...order, quantity_order: value + 1 }
@@ -122,26 +126,28 @@ const EditOrder = () => {
                             <div className="col-md-6 col-sm-8 d-flex justify-content-between align-items-center">
                               <i
                                 className="fa fa-minus-square text-primary cursor-pointer"
-                                onClick={() =>
-                                  decreaseOrderedValue(
-                                    item.product_id._id,
-                                    item.quantity_order
-                                  )
+                                onClick={
+                                  // () => decreaseOrderedValue(
+                                  //   item.product_id._id,
+                                  //   item.quantity_order
+                                  // )
+                                  ()=>window.alert("Can not decrease quantity ordered")
                                 }
                               ></i>
                               <input
                                 type="text"
                                 readOnly={true}
-                                className="w-10 text-center"
+                                className="w-20 text-center"
                                 value={item.quantity_order}
                               />
                               <i
                                 className="fa fa-plus-square text-primary cursor-pointer"
-                                onClick={() =>
-                                  increaseOrderedValue(
-                                    item.product_id._id,
-                                    item.quantity_order
-                                  )
+                                onClick={
+                                  // () =>increaseOrderedValue(
+                                  //   item.product_id._id,
+                                  //   item.quantity_order
+                                  // )
+                                  ()=>window.alert("Can not increase quantity ordered")
                                 }
                               ></i>
                               <div className="text-end w-50">
@@ -151,14 +157,14 @@ const EditOrder = () => {
                                   $
                                 </span>
                               </div>
-                              <div className="cursor-pointer">
+                              {/* <div className="cursor-pointer">
                                 <i
                                   className="bi bi-x-circle-fill text-primary"
                                   onClick={() =>
                                     handerDelete(item.product_id._id)
                                   }
                                 ></i>
-                              </div>
+                              </div> */}
                             </div>
                             <h6
                               className="d-flex w-100 err text-danger justify-content-end"
@@ -176,17 +182,17 @@ const EditOrder = () => {
               <div className="col-md-7">
                 <div className="form-floating">
                     <select className="form-select" required id="select1"
-                        value={data?.role || ''}
-                        onChange={(e) => setData({ ...data, role: e.target.value })}
+                        value={data?.status || ''}
+                        onChange={(e) => setData({ ...data, status: e.target.value })}
                     >
                       <option value="PREPARE">PREPARE</option>
                       <option value="COMPLETE">COMPLETE</option>
-                      <option value="PAYED">PAYED</option>
+                      <option value="PAID">PAID</option>
                     </select>
                     <label htmlFor="select1">Status</label>
                   </div>
               </div>
-              <h4 className="col-12">Total price: {totalPrice}</h4>
+              <h4 className="col-12">Total price: {totalPrice} $</h4>
               <div className="col-4">
                 <button
                   className="btn btn-primary w-50 py-3 mr-5"

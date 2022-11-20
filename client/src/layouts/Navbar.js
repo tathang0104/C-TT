@@ -68,7 +68,6 @@ export default function Navbar({children}) {
     }, [data])
 
     useEffect(() => {
-        console.log(userLoginedToken)
         if (localStorage.getItem('authToken') || userLoginedToken)
             dispatch(getProfile.getProfileRequest(localStorage.getItem('authToken')));
     }, [dispatch, userLoginedToken, dataUser]);   

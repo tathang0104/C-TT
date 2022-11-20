@@ -6,14 +6,17 @@ const { protect } = require("../middleware/auth");
 const {
     createOrUpdateVote,
     getAllAvgVote,
-    getAllAvgVoteById
+    getAllAvgVoteById,
+    getVoteById
 } = require("../controllers/vote");
 
 // router.route("/:id").get(protect, getTotalVote);
 
 router.route("/").get(protect, getAllAvgVote);
 
-router.route("/:_id").get(protect, getAllAvgVoteById);
+router.route("/:_id").get(getAllAvgVoteById);
+
+router.route("/selfVote/:_id").get(protect, getVoteById);
 
 router.route("/createOrUpdate/:_id").post(protect, createOrUpdateVote);
 

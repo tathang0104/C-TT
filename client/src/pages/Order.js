@@ -83,19 +83,21 @@ const Order = () => {
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col" className='w-15'>User name</th>
+            <th scope="col" className='w-20'>User name</th>
             <th scope="col">Order time</th>
-            <th scope="col" className='w-15'>Special request</th>
-            <th scope="col" className='w-50'>Detail order</th>
+            <th scope="col" className='w-20'>Special request</th>
+            <th scope="col" className='w-20'>Status</th>
+            {/* <th scope="col" className='w-50'>Detail order</th> */}
             <th scope="col">Actions</th>  
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {/* <tr>
             <th scope="col"></th>
-            <th scope="col" className='w-15'></th>
+            <th scope="col" className='w-20'></th>
             <th scope="col"></th>
-            <th scope="col" className='w-15'></th>
+            <th scope="col" className='w-20'></th>
+            <th scope="col" className='w-20'></th>
             <th scope="col" className='w-50'>
                 <div className='row'>
                     <div className='col-md-3'>Product name</div>
@@ -105,7 +107,7 @@ const Order = () => {
                 </div>
             </th>
             <th scope="col"></th>
-          </tr>
+          </tr> */}
           {
             orders?.map((order, index) => {
               return (
@@ -114,11 +116,12 @@ const Order = () => {
                   <td>{order?.user_id?.username}</td>
                   <td>{order?.order_time}</td>
                   <td>{order?.special_request}</td>
-                  <td className='w-50'>
+                  <td>{order?.status}</td>
+                  {/* <td className='w-50'>
                     {
                       order?.detail_order?.map((item)=>{
                         return (
-                          <div className='row mb-3' key={item._id}>
+                          <div className='row mb-3' key={item?._id}>
                             <div className='col-md-3'>{item?.product_id?.name}</div>
                             <div className='col-md-3'>{item?.product_id?.price}</div>
                             <div className='col-md-3'>
@@ -129,7 +132,7 @@ const Order = () => {
                         )
                       })
                     }
-                  </td>
+                  </td> */}
                   <td>
                     <img style={{height: '25px', width: '25px'}} src='/img/edit.png' alt="" className='p-1 cursor-pointer' onClick={() => handleEdit(order?._id)}/>
                     {/* <img style={{height: '25px', width: '25px'}} src='/img/delete.png' alt="" className='p-1 cursor-pointer' onClick={() => {if (window.confirm('Are you sure to delete this order?')) {handleDelete(order._id)}}}/> */}

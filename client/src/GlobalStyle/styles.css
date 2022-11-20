@@ -742,6 +742,7 @@ cursor: pointer;
 } 
 
 .star{
+    display: inline-block;
     background-image: url("../../public/img/grey-star.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -750,6 +751,17 @@ cursor: pointer;
     width: 20px;
     height: 20px;
 }
+
+.unvoted{
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: 10px !important;
+}
+
+/* .unvoted:hover{
+    background-image: url("../../public/img/yellow-star.png");
+} */
+
 
 .voted-star{
     background-image: url("../../public/img/yellow-star.png");

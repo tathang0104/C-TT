@@ -22,6 +22,7 @@ exports.getAllAvgVote = async (req, res, next) => {
 exports.getAllAvgVoteById = async (req, res, next) => {
     const product_id = (req.params._id)
     try {
+      if (product_id !== undefined) {
         const vote = await Vote.aggregate([
             { $match: { product_id: ObjectId(product_id) } },
             {
@@ -33,10 +34,23 @@ exports.getAllAvgVoteById = async (req, res, next) => {
             }
         ])
       
-      res.status(200).json({ success: true, vote });
+        res.status(200).json({ success: true, vote });
+      }
     } catch (err) {
       next(err);
     }
+};
+
+exports.getVoteById = async (req, res, next) => {
+  const product_id = (req.params._id)
+  try {
+    if (product_id !== undefined) {
+      const vote = await Vote.findOne({product_id: ObjectId(product_id), user_id: ObjectId(req.user._id) })
+      res.status(200).json({ success: true, vote });
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.createOrUpdateVote = async (req, res, next) => {

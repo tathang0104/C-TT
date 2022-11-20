@@ -12,7 +12,7 @@ const {
 
 router.route("/:_id").get(protect, getCommentByIdProduct);
 
-router.route("/create").post(protect, createComment);
+router.route("/create/:_id").post(protect, createComment);
 
 router.route("/update/:_id").put(protect, updateComment);
 

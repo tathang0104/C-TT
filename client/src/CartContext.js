@@ -73,16 +73,8 @@ export function CartProvider({children}) {
         })
     }
     
-    const addToCard = (id) => { 
-        getVoteById(id).then((data)=>{
-            console.log(data.data.vote[0])
-            const vote = data.data.vote[0]
-            if (vote) {
-                setVoteData(vote)
-            }
-        })
+    const addToCard = (id) => {
         getCommentById(id).then((data)=>{
-            console.log(data.data)
             const comments = data.data
             if (comments) {
                 setcommentData(comments)

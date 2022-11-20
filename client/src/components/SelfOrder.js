@@ -4,9 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../redux/actions';
 import { selfOrder, totalPageSelfOrder } from '../redux/selectors';
 import clsx from 'clsx';
+import { FaCcPaypal } from "react-icons/fa";
+import { BsFillBagCheckFill } from "react-icons/bs";
 
 export const SelfOrder = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const orders = useSelector(selfOrder);
   const total = useSelector(totalPageSelfOrder);
   const pagination = []
@@ -15,9 +18,11 @@ export const SelfOrder = () => {
     size: 4,
     search: '',
   });
+
   const changePage = (i) => {
     setOption(prev => ({...prev, page: i}))
   } 
+
   for(let i = 0; i < total; i++) {
     pagination.push(
       <li key={i}>
@@ -40,10 +45,19 @@ export const SelfOrder = () => {
     dispatch(actions.getSelfOrders.getSelfOrdersRequest(option));
   }, [dispatch, option]);
 
+  const giveFeedback = (id) => {
+    navigate(`feedback/${id}`)
+  }
+
+  const payment = (id) => {
+    navigate(`/dashboard/checkOut/${id}`)
+  }
+
   return (
     <>
       <div className='d-flex justify-content-between align-items-center'>
         <h1 className='text-primary'>Your orders list</h1>
+        <h5 style={{fontWeight: "700"}}>Please click on each dish to leave feedback</h5>
       </div>
       <table className="table table-striped mt-3">
         <thead>
@@ -52,6 +66,8 @@ export const SelfOrder = () => {
             <th scope="col">Order time</th>
             <th scope="col" className='w-15'>Special request</th>
             <th scope="col" className='w-50'>Detail order</th>
+            <th scope="col">Status</th>
+            <th scope="col">Payment</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +84,7 @@ export const SelfOrder = () => {
                 </div>
             </th>
             <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
           {
             orders?.map((order, index) => {
@@ -80,7 +97,7 @@ export const SelfOrder = () => {
                     {
                       order?.detail_order?.map((item)=>{
                         return (
-                          <div className='row mb-3' key={item._id}>
+                          <div className='row mb-3 cursor-pointer' key={item._id} onClick={()=>{giveFeedback(item.product_id._id)}}>
                             <div className='col-md-3'>{item?.product_id?.name}</div>
                             <div className='col-md-3'>{item?.product_id?.price}</div>
                             <div className='col-md-3'>
@@ -92,6 +109,14 @@ export const SelfOrder = () => {
                       })
                     }
                   </td>
+                  <td>{order?.status}</td>
+                  { 
+                    order?.status === "PAID" ? (
+                      <td className='text-center'><BsFillBagCheckFill style={{color: '#FEA116', fontSize: '30px'}}/></td> 
+                    ) : (
+                       <td className='cursor-pointer text-center' onClick={()=>{payment(order?._id)}}><FaCcPaypal style={{color: '#FEA116', fontSize: '30px'}}/></td>
+                    )
+                  }
                 </tr>
               )
             })

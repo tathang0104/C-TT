@@ -40,8 +40,6 @@ app.use("/api/comment", require("./routes/comment"));
 app.use("/api/vote", require("./routes/vote"));
 app.use("/api/payment", require("./routes/payment"));
 
-
-
 // Error Handler Middleware
 app.use(errorHandler);
 

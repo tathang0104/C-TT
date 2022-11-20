@@ -12,7 +12,7 @@ const CreateProduct = () => {
     name: '',
     price: '',
     productPhoto: '',
-    category: '',
+    category: 'Breakfast',
     description: '',
   });
   

@@ -17,6 +17,7 @@
     "chart.js": "^3.9.1",
     "clsx": "^1.2.1",
     "dayjs": "^1.11.5",
+    "paypal-checkout": "^4.0.336",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",

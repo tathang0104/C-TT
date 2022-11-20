@@ -181,6 +181,7 @@ exports.updateUser = async (req, res, next) => {
     user.dob = req.body.dob;
     user.username = req.body.username;
     user.address = req.body.address;
+    user.role = req.body.role;
 
     await user.save();
 

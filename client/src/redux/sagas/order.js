@@ -58,9 +58,7 @@ function* createOrderSaga(action) {
 
 function* updateOrderSaga(action) {
   try {
-    console.log(action.payload)
     const updatedOrder = yield call(api.updateOrder, action.payload);
-    console.log(updatedOrder.data)
     yield put(actions.updateOrder.updateOrderSuccess(updatedOrder.data));
   } catch (err) {
     yield put(actions.updateOrder.updateOrderFailure(err));

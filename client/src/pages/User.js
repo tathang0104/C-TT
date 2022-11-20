@@ -23,12 +23,21 @@ const User = () => {
   }, [dispatch, option]);
 
   const handleEdit = (id) => {
-    navigate(`update/${id}`)
+    if (localStorage.getItem("userRole") === "ADMIN") {
+      navigate(`update/${id}`)
+    } else {
+      window.alert("You do not have permission to edit this user")
+    }
   } 
   
   const handleDelete = (id) => {
-    dispatch(actions.deleteUser.deleteUserRequest(id))
-    setOption(prev => ({...prev, page: 1}))
+    if (localStorage.getItem("userRole") === "ADMIN") {
+      dispatch(actions.deleteUser.deleteUserRequest(id))
+      setOption(prev => ({...prev, page: 1}))
+    } else {
+      window.alert("You do not have permission to edit this user")
+    }
+
   } 
 
   const changePage = (i) => {

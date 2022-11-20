@@ -1,12 +1,12 @@
 const paypal = require("paypal-rest-sdk");
-
+const OrderedMenu = require("../models/OrderedMenu");
 paypal.configure({
   mode: "sandbox", //sandbox or live
   client_id:
-    "AXMeJ1HaMiTJqoZAXDezOC_NQtXZjYGH55WmJVTvqtrZgkva2xN1NkPQzR8eFyrUWR6TiK9y3YzWLpws",
+    "ATIfXKaRcICmD6EF-S18-BTFbZs-NHusyQ9r_YN6IeqVM4fA6nKwFj8xQOD4ZF4y4s76_pqUZbyI83Q9",
   client_secret:
-    "EDtLfGhK53kOEEbVhTb0kzwcLCwfmRBsgYzTvJ9q3HZ9SgWXL6fGlMWs33hCbKe7RQENxXkGpabYDmok",
-});
+    "EOkjVJgapLcbv46MAa56GFoDgj5bHfM-pb7mWMj2ogkucpZG8AvIEEWUwHUkmydJtLtcisnPf2NllGvR",
+}); 
 
 exports.pay = async (req, res, next) => {
   const create_payment_json = {
@@ -15,8 +15,8 @@ exports.pay = async (req, res, next) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      return_url: "http://localhost:5000/success",
+      cancel_url: "http://localhost:5000/cancel",
     },
     transactions: [
       {
@@ -93,3 +93,27 @@ exports.success = async (req, res, next) => {
     }
   );
 };
+
+exports.paymentSuccess = async (req, res, next) => {
+  try {
+    console.log(req.user)
+    const order = await OrderedMenu.findOne({_id: req.params._id});
+    console.log(order)
+    if (!order) {
+      return next(new ErrorResponse("You have no permissions to update", 401));
+    }
+
+    order.status = "PAID";
+
+    await order.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Paid Success",
+      data: order
+    });
+
+  } catch (err) {
+    next(err);
+  }
+}

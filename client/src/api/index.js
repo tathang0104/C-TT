@@ -7,6 +7,7 @@ const Product_URL = `${URL}/product`;
 const Order_URL = `${URL}/order`;
 const Vote_URL = `${URL}/vote`;
 const Comment_URL = `${URL}/comment`;
+const Payment_URL = `${URL}/payment`;
 
 const config = {
   headers: {
@@ -174,6 +175,15 @@ export const deleteOrder = (id) => axios.delete(`${Order_URL}/delete/${id}`, {
   }
 });
 
+// payment
+
+export const paymentSuccess = (id) => axios.put(`${Payment_URL}/paymentSuccess/${id}`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});
+
 // vote on product
 
 export const getVoteById = (id) => axios.get(`${Vote_URL}/${id}`, {
@@ -183,9 +193,37 @@ export const getVoteById = (id) => axios.get(`${Vote_URL}/${id}`, {
   }
 });
 
+export const getSelfVoteById = (id) => axios.get(`${Vote_URL}/selfVote/${id}`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});
+
+export const createOrUpdateVote = (id, star) => axios.post(`${Vote_URL}/createOrUpdate/${id}`, star, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});
+
 //comment on product
 
 export const getCommentById = (id) => axios.get(`${Comment_URL}/${id}`, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});
+
+export const createComment = (id, data) => axios.post(`${Comment_URL}/create/${id}`, data, {
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  }
+});
+
+export const deleteComment = (id) => axios.delete(`${Comment_URL}/delete/${id}`, {
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("authToken")}`,
